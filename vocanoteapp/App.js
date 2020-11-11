@@ -29,13 +29,13 @@ const lans = [
     name: '영어',
     id: 1,
     bcolors: {backgroundColor: '#CC97F3'},
-    data: ['hi'],
+    data: ['sufficient'],
   },
   {
     name: '중국어',
     id: 2,
     bcolors: {backgroundColor: '#FDE27F'},
-    data: ['你好'],
+    data: ['吃饭'],
   },
   {
     name: '일본어',
