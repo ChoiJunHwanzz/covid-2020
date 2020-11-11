@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import LanBox from './mainlanbox';
 import Showdatas from './showdatas';
+import RBSheet from 'react-native-raw-bottom-sheet';
 
 const pwidth = Dimensions.get('window').width;
 
@@ -57,6 +58,8 @@ export default class App extends Component {
         isclicked: true,
         clickedbtn: item,
       });
+    } else {
+      this.RBSheet.open();
     }
   };
   render() {
@@ -77,6 +80,22 @@ export default class App extends Component {
             </TouchableOpacity>
           ))}
         </View>
+        <RBSheet
+          ref={(ref) => {
+            this.RBSheet = ref;
+          }}
+          height={300}
+          openDuration={250}
+          customStyles={{
+            container: {
+              justifyContent: 'center',
+              alignItems: 'center',
+            },
+          }}>
+          <View>
+            <Text>bottom sheet</Text>
+          </View>
+        </RBSheet>
       </View>
     );
   }

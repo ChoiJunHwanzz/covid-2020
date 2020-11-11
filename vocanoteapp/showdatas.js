@@ -31,7 +31,6 @@ export default class Showdatas extends Component {
       ProviderTypes.Google,
       API_KEY,
       'ko', // target lang
-      'en', // source lang
     );
     const translator = TranslatorFactory.createTranslator();
     translator.translate(data, 'ko').then(
