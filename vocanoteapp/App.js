@@ -11,15 +11,9 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import LanBox from './mainlanbox';
-import {
-  PowerTranslator,
-  ProviderTypes,
-  TranslatorConfiguration,
-  TranslatorFactory,
-} from 'react-native-power-translator';
+import Showdatas from './showdatas';
 
 const pwidth = Dimensions.get('window').width;
-// const pheight = Dimensions.get('window').height;
 
 // 버튼 색 결정하기 위해 임의의 색 가져옴(실제로는 직접 색을 지정해줄 것임)
 _getrandcolr = () => {
@@ -29,61 +23,57 @@ _getrandcolr = () => {
   return `rgb(${R}, ${G}, ${B})`;
 };
 
-const API_KEY = '';
-
 // 기본적인 언어들로 배경 색을 저장하고 개발하다가 추가로 데이터 추가 가능
 const lans = [
   {
     name: '영어',
     id: 1,
     bcolors: {backgroundColor: '#CC97F3'},
-    data: [{hello: '안녕하세요'}],
+    data: ['hi'],
   },
   {
     name: '중국어',
     id: 2,
     bcolors: {backgroundColor: '#FDE27F'},
-    data: [{你好: '안녕하세요'}],
+    data: ['你好'],
   },
   {
     name: '일본어',
     id: 3,
     bcolors: {backgroundColor: '#7EA3ED'},
-    data: [{곤니찌와: '안녕하세요'}],
+    data: ['こんにちは'],
   },
   {name: 'add', id: 5, bcolors: {backgroundColor: '#37B092'}},
 ];
 
 export default class App extends Component {
-  // translate
-  _translateWords = () => {
-    // translate Korean address to English
-    TranslatorConfiguration.setConfig(
-      ProviderTypes.Google,
-      API_KEY,
-      'ko', // target lang
-      'en', // source lang
-    );
-    const translator = TranslatorFactory.createTranslator();
-    translator.translate('hi', 'ko').then(
-      (res) => {
-        console.log(res);
-      },
-      (error) => {
-        console.log(error);
-      },
-    );
+  state = {
+    isclicked: false,
+    clickedbtn: null,
+  };
+  _clickbtn = (item) => {
+    if (item.name != 'add') {
+      this.setState({
+        isclicked: true,
+        clickedbtn: item,
+      });
+    }
   };
   render() {
-    return (
+    const {isclicked, clickedbtn} = this.state;
+    return isclicked ? (
+      <Showdatas item={clickedbtn} />
+    ) : (
       <View style={styles.main}>
         <View style={styles.name}>
           <Text style={styles.nametxt}>Vocabulary App</Text>
         </View>
         <View style={styles.langs}>
           {lans.map((item) => (
-            <TouchableOpacity key={item.id} onPress={this._translateWords}>
-              <LanBox name={item.name} bcolor={item.bcolors} />
+            <TouchableOpacity
+              onPress={this._clickbtn.bind(this, item)}
+              key={item.id}>
+              <LanBox item={item} />
             </TouchableOpacity>
           ))}
         </View>
