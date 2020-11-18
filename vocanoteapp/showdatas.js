@@ -8,6 +8,7 @@ import {
   Dimensions,
   TouchableWithoutFeedback,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import {
   PowerTranslator,
@@ -18,7 +19,7 @@ import {
 import App from './App';
 
 const pwidth = Dimensions.get('window').width;
-const API_KEY = 'AIzaSyAUf_YUFn0FhwQU8grgK90NmRtDGooxUkU';
+const API_KEY = 'APIKEY';
 
 export default class Showdatas extends Component {
   state = {
@@ -54,19 +55,18 @@ export default class Showdatas extends Component {
     const {trtxt, clicked} = this.state;
     return clicked ? (
       <App />
-    ) : (
+    ) : Platform.OS == 'android' ? (
       <View style={styles.main}>
-        <Text style={styles.txt}>{this.props.item.name}</Text>
-        <Text style={styles.txt}>{trtxt}</Text>
-        <TouchableOpacity
-          style={styles.btn}
-          onPress={this._translateWords.bind(this, this.props.item.data)}>
-          <Text>translate</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.btn} onPress={this._back}>
-          <Text>back</Text>
-        </TouchableOpacity>
+        <View style={styles.Topbar}></View>
+        <View style={styles.contents}></View>
+        <View style={styles.bottom}></View>
       </View>
+    ) : (
+      <SafeAreaView style={styles.main}>
+        <View style={styles.Topbar}></View>
+        <View style={styles.contents}></View>
+        <View style={styles.bottom}></View>
+      </SafeAreaView>
     );
   }
 }
@@ -74,17 +74,17 @@ export default class Showdatas extends Component {
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
-  txt: {
-    fontSize: 30,
+  Topbar: {
+    flex: 0.1,
+    backgroundColor: 'red',
   },
-  btn: {
-    width: 100,
-    height: 50,
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+  contents: {
+    flex: 1,
+    backgroundColor: 'green',
+  },
+  bottom: {
+    flex: 1,
+    backgroundColor: 'blue',
   },
 });

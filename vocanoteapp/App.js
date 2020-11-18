@@ -30,7 +30,7 @@ _getrandcolr = () => {
 
 export default class App extends Component {
   state = {
-    isclicked: true,
+    isclicked: false,
     clickedbtn: null,
     item: {
       name: '영어',
@@ -52,7 +52,7 @@ export default class App extends Component {
   render() {
     const {isclicked, clickedbtn, item} = this.state;
     return isclicked ? (
-      <Showdatas item={item} />
+      <Showdatas item={clickedbtn} />
     ) : (
       // <Showdatas item={clickedbtn} />
       <View style={styles.main}>
