@@ -9,12 +9,16 @@ import {
   Platform,
   Dimensions,
   TouchableOpacity,
+  FlatList,
 } from 'react-native';
 import LanBox from './mainlanbox';
 import Showdatas from './showdatas';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import lanjson from './lansjson';
+import lans from './lans';
 
 const pwidth = Dimensions.get('window').width;
+const pheight = Dimensions.get('window').height;
 
 // 버튼 색 결정하기 위해 임의의 색 가져옴(실제로는 직접 색을 지정해줄 것임)
 _getrandcolr = () => {
@@ -24,33 +28,16 @@ _getrandcolr = () => {
   return `rgb(${R}, ${G}, ${B})`;
 };
 
-// 기본적인 언어들로 배경 색을 저장하고 개발하다가 추가로 데이터 추가 가능
-const lans = [
-  {
-    name: '영어',
-    id: 1,
-    bcolors: {backgroundColor: '#CC97F3'},
-    data: ['sufficient'],
-  },
-  {
-    name: '중국어',
-    id: 2,
-    bcolors: {backgroundColor: '#FDE27F'},
-    data: ['吃饭'],
-  },
-  {
-    name: '일본어',
-    id: 3,
-    bcolors: {backgroundColor: '#7EA3ED'},
-    data: ['こんにちは'],
-  },
-  {name: 'add', id: 5, bcolors: {backgroundColor: '#37B092'}},
-];
-
 export default class App extends Component {
   state = {
-    isclicked: false,
+    isclicked: true,
     clickedbtn: null,
+    item: {
+      name: '영어',
+      id: 1,
+      bcolors: {backgroundColor: '#CC97F3'},
+      data: ['sufficient'],
+    },
   };
   _clickbtn = (item) => {
     if (item.name != 'add') {
@@ -63,10 +50,11 @@ export default class App extends Component {
     }
   };
   render() {
-    const {isclicked, clickedbtn} = this.state;
+    const {isclicked, clickedbtn, item} = this.state;
     return isclicked ? (
-      <Showdatas item={clickedbtn} />
+      <Showdatas item={item} />
     ) : (
+      // <Showdatas item={clickedbtn} />
       <View style={styles.main}>
         <View style={styles.name}>
           <Text style={styles.nametxt}>Vocabulary App</Text>
@@ -84,16 +72,35 @@ export default class App extends Component {
           ref={(ref) => {
             this.RBSheet = ref;
           }}
-          height={300}
+          height={pheight * 0.6}
           openDuration={250}
           customStyles={{
             container: {
-              justifyContent: 'center',
               alignItems: 'center',
+              borderTopLeftRadius: 20,
+              borderTopRightRadius: 20,
+              height: pheight / 2,
             },
-          }}>
-          <View>
-            <Text>bottom sheet</Text>
+          }}
+          closeOnDragDown={true}
+          dragFromTopOnly={true}>
+          <View
+            style={{
+              flex: 1,
+              width: pwidth,
+              backgroundColor: '#a1a1a1',
+            }}>
+            <ScrollView>
+              {lanjson.map((lang, i) => (
+                <TouchableOpacity
+                  style={{height: 50, width: pwidth, borderWidth: 1}}
+                  key={i}>
+                  <View style={{height: 20, width: pwidth}}>
+                    <Text>{lang.name}</Text>
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
           </View>
         </RBSheet>
       </View>

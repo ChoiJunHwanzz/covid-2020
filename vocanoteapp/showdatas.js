@@ -18,7 +18,7 @@ import {
 import App from './App';
 
 const pwidth = Dimensions.get('window').width;
-const API_KEY = '';
+const API_KEY = 'AIzaSyAUf_YUFn0FhwQU8grgK90NmRtDGooxUkU';
 
 export default class Showdatas extends Component {
   state = {

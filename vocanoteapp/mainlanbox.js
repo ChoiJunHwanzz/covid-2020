@@ -8,6 +8,7 @@ import {
   Dimensions,
   TouchableWithoutFeedback,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import Showdatas from './showdatas';
 
@@ -36,6 +37,19 @@ const styles = StyleSheet.create({
     margin: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#4d4d4d',
+        shadowOffset: {
+          width: 5,
+          height: 7,
+        },
+        shadowOpacity: 0.3,
+      },
+      android: {
+        elevation: 10,
+      },
+    }),
   },
   btnname: {
     fontSize: 30,

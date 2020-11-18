@@ -1,0 +1,21 @@
+[
+    {
+      "name": "영어",
+      "id": 1,
+      "bcolors": {"backgroundColor": "#CC97F3"},
+      "data": ["sufficient"]
+    },
+    {
+      "name": "중국어",
+      "id": 2,
+      "bcolors": {"backgroundColor": "#FDE27F"},
+      "data": ["吃饭"]
+    },
+    {
+      "name": "일본어",
+      "id": 3,
+      "bcolors": {"backgroundColor": "#7EA3ED"},
+      "data": ["こんにちは"]
+    },
+    {"name": "add", "id": 5, "bcolors": {"backgroundColor": "#37B092"}}
+  ]
