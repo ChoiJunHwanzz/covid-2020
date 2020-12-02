@@ -3,19 +3,40 @@
       "name": "영어",
       "id": 1,
       "bcolors": {"backgroundColor": "#CC97F3"},
-      "data": ["sufficient"]
+      "data": [
+        {
+          "id": "1",
+          "word": "sufficient",
+          "translated": "충분한",
+          "Done": false
+        }
+      ]
     },
     {
       "name": "중국어",
       "id": 2,
       "bcolors": {"backgroundColor": "#FDE27F"},
-      "data": ["吃饭"]
+      "data": [
+        {
+          "id": "1",
+          "word": "吃饭",
+          "translated": "밥 먹다",
+          "Done": false
+        }
+      ]
     },
     {
       "name": "일본어",
       "id": 3,
       "bcolors": {"backgroundColor": "#7EA3ED"},
-      "data": ["こんにちは"]
+      "data": [
+        {
+          "id": "1",
+          "word": "こんにちは",
+          "translated": "안녕하세요",
+          "Done": false
+          }
+        ]
     },
     {"name": "add", "id": 5, "bcolors": {"backgroundColor": "#37B092"}}
   ]

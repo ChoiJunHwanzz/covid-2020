@@ -32,12 +32,6 @@ export default class App extends Component {
   state = {
     isclicked: false,
     clickedbtn: null,
-    item: {
-      name: '영어',
-      id: 1,
-      bcolors: {backgroundColor: '#CC97F3'},
-      data: ['sufficient'],
-    },
   };
   _clickbtn = (item) => {
     if (item.name != 'add') {
@@ -50,7 +44,7 @@ export default class App extends Component {
     }
   };
   render() {
-    const {isclicked, clickedbtn, item} = this.state;
+    const {isclicked, clickedbtn} = this.state;
     return isclicked ? (
       <Showdatas item={clickedbtn} />
     ) : (
@@ -68,6 +62,8 @@ export default class App extends Component {
             </TouchableOpacity>
           ))}
         </View>
+
+        {/* 바텀 시트 */}
         <RBSheet
           ref={(ref) => {
             this.RBSheet = ref;
@@ -88,14 +84,22 @@ export default class App extends Component {
             style={{
               flex: 1,
               width: pwidth,
-              backgroundColor: '#a1a1a1',
+              backgroundColor: 'white',
             }}>
             <ScrollView>
               {lanjson.map((lang, i) => (
                 <TouchableOpacity
                   style={{height: 50, width: pwidth, borderWidth: 1}}
                   key={i}>
-                  <View style={{height: 20, width: pwidth}}>
+                  <View
+                    style={{
+                      height: 20,
+                      width: pwidth,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderWidth: 1,
+                      flex: 1,
+                    }}>
                     <Text>{lang.name}</Text>
                   </View>
                 </TouchableOpacity>

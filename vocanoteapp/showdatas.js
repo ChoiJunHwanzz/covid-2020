@@ -21,6 +21,7 @@ import {
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import App from './App';
+import DataItem from './dataitems';
 
 const pwidth = Dimensions.get('window').width;
 const API_KEY = 'AIzaSyAUf_YUFn0FhwQU8grgK90NmRtDGooxUkU';
@@ -28,6 +29,7 @@ const API_KEY = 'AIzaSyAUf_YUFn0FhwQU8grgK90NmRtDGooxUkU';
 export default class Showdatas extends Component {
   state = {
     trtxt: this.props.item.data,
+    name: this.props.item.name,
     clicked: false,
     modalvisible: false, //
   };
@@ -60,7 +62,6 @@ export default class Showdatas extends Component {
     this.setState({
       modalvisible: true,
     });
-    console.log('add button');
   };
 
   // data 저장 없이 close
@@ -78,33 +79,35 @@ export default class Showdatas extends Component {
   };
 
   render() {
-    const {trtxt, clicked, modalvisible} = this.state;
+    const {trtxt, clicked, modalvisible, name} = this.state;
     return clicked ? (
       <App />
     ) : (
       <View style={styles.container}>
-        <View style={styles.topbar}>
+        <View
+          style={{
+            ...styles.topbar,
+            backgroundColor: this.props.item.bcolors.backgroundColor,
+          }}>
           <TouchableOpacity style={styles.backbtn} onPress={this._back}>
             <EntypoIcon
               name="chevron-thin-left"
               style={styles.backicon}></EntypoIcon>
           </TouchableOpacity>
-          <Text style={styles.lanname}>영어</Text>
+          <Text style={styles.lanname}>{name}</Text>
           <TouchableOpacity style={styles.addbtn} onPress={this._adddatas}>
             <IonIcon name="add-outline" style={styles.addicon} />
           </TouchableOpacity>
         </View>
-        <View style={styles.datas}>
-          <View style={styles.datadetails}>
-            <TouchableOpacity style={styles.checkboxbtn}>
-              <EntypoIcon name="check" style={styles.checkbox}></EntypoIcon>
-            </TouchableOpacity>
-            <View style={styles.words}>
-              <Text style={styles.word}>functionality</Text>
-              <Text style={styles.translated}>기능성</Text>
-            </View>
-          </View>
-        </View>
+        <>
+          {trtxt.map((item) => (
+            <DataItem
+              item={item}
+              key={item.id}
+              color={this.props.item.bcolors.backgroundColor}
+            />
+          ))}
+        </>
 
         {/* modal start */}
         <Modal
@@ -148,7 +151,7 @@ const styles = StyleSheet.create({
   // top navigation
   topbar: {
     width: pwidth,
-    height: 163,
+    height: 160,
     backgroundColor: 'rgba(242,149,95,1)',
     borderBottomLeftRadius: 44,
     borderBottomRightRadius: 44,
@@ -169,7 +172,7 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   lanname: {
-    fontFamily: 'verdana-regular',
+    fontFamily: 'Itim-Regular',
     color: 'rgba(255,255,255,1)',
     fontSize: 45,
   },
