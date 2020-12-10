@@ -1,42 +1,21 @@
 [
     {
       "name": "영어",
-      "id": 1,
-      "bcolors": {"backgroundColor": "#CC97F3"},
-      "data": [
-        {
-          "id": "1",
-          "word": "sufficient",
-          "translated": "충분한",
-          "Done": false
-        }
-      ]
+      "code": "en",
+      "id": "defaulten",
+      "bcolors": {"backgroundColor": "#CC97F3"}
     },
     {
       "name": "중국어",
-      "id": 2,
-      "bcolors": {"backgroundColor": "#FDE27F"},
-      "data": [
-        {
-          "id": "1",
-          "word": "吃饭",
-          "translated": "밥 먹다",
-          "Done": false
-        }
-      ]
+      "code": "zh",
+      "id": "defaultzh",
+      "bcolors": {"backgroundColor": "#FDE27F"}
     },
     {
       "name": "일본어",
-      "id": 3,
-      "bcolors": {"backgroundColor": "#7EA3ED"},
-      "data": [
-        {
-          "id": "1",
-          "word": "こんにちは",
-          "translated": "안녕하세요",
-          "Done": false
-          }
-        ]
+      "code": "ja",
+      "id": "defaultja",
+      "bcolors": {"backgroundColor": "#7EA3ED"}
     },
-    {"name": "add", "id": 5, "bcolors": {"backgroundColor": "#37B092"}}
+    {"name": "추가", "id": "add", "bcolors": {"backgroundColor": "#37B092"}}
   ]

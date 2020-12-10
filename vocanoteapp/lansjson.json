@@ -1,22 +1,30 @@
 [
     {
-        "name": "영어",
-        "code": "en"
-    },
-    {
-        "name": "중국어",
-        "code": "zh"
-    },
-    {
-        "name": "일본어",
-        "code": "ja"
-    },
-    {
         "name": "프랑스어",
         "code": "fr"
     },
     {
         "name": "스페인어",
         "code": "sp"
+    },
+    {
+        "name": "독일어",
+        "code": "de"
+    },
+    {
+        "name": "이탈리아어",
+        "code": "it"
+    },
+    {
+        "name": "러시아어",
+        "code": "ru"
+    },
+    {
+        "name": "태국어",
+        "code": "th"
+    },
+    {
+        "name": "베트남어",
+        "code": "vi"
     }
 ]
