@@ -11,11 +11,18 @@
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.13.2",
+    "@react-native-community/masked-view": "^0.1.10",
     "@react-native-picker/picker": "^1.9.4",
+    "@react-navigation/native": "^5.8.10",
+    "@react-navigation/stack": "^5.12.8",
     "react": "16.13.1",
     "react-native": "0.63.3",
+    "react-native-gesture-handler": "^1.9.0",
     "react-native-power-translator": "^1.1.1",
     "react-native-raw-bottom-sheet": "^2.2.0",
+    "react-native-reanimated": "^1.13.2",
+    "react-native-safe-area-context": "^3.1.9",
+    "react-native-screens": "^2.16.1",
     "react-native-swipe-list-view": "^3.2.5",
     "react-native-vector-icons": "^7.1.0",
     "react-native-wheel-picker-android": "^2.0.6"

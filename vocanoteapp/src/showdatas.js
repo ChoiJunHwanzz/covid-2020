@@ -23,7 +23,7 @@ import IonIcon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {SwipeListView, SwipeRow} from 'react-native-swipe-list-view';
 import v4 from 'uuid/v4';
-import App from './App';
+import HomeScreen from './HomeScreen';
 
 const pwidth = Dimensions.get('window').width;
 const API_KEY = 'AIzaSyAUf_YUFn0FhwQU8grgK90NmRtDGooxUkU';
@@ -31,14 +31,13 @@ const API_KEY = 'AIzaSyAUf_YUFn0FhwQU8grgK90NmRtDGooxUkU';
 export default class Showdatas extends Component {
   state = {
     txt: '', // before translated
-    name: this.props.item.name, // lan name
-    code: this.props.item.code, // lan code
-    color: this.props.item.bcolors.backgroundColor, // lan color
+    name: this.props.route.params.item.name, // lan name
+    code: this.props.route.params.item.code, // lan code
+    color: this.props.route.params.item.bcolors.backgroundColor, // lan color
     clicked: false, // to go back
     modalvisible: false, // to show modal
     vocadatas: {}, // save voca datas
   };
-
   componentDidMount = () => {
     this._getDatas();
   };
@@ -78,9 +77,7 @@ export default class Showdatas extends Component {
   };
 
   _back = () => {
-    this.setState({
-      clicked: true,
-    });
+    this.props.navigation.goBack();
   };
 
   _openModal = () => {
@@ -176,14 +173,12 @@ export default class Showdatas extends Component {
 
   render() {
     const {clicked, modalvisible, name, code, vocadatas, color} = this.state;
-    return clicked ? (
-      <App />
-    ) : (
+    return (
       <View style={styles.container} ref={(ref) => (this.parent = ref)}>
         <SafeAreaView
           style={{
             ...styles.topbar,
-            backgroundColor: this.props.item.bcolors.backgroundColor,
+            backgroundColor: color,
           }}>
           <TouchableOpacity style={styles.backbtn} onPress={this._back}>
             <EntypoIcon
