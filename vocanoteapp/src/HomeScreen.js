@@ -1,5 +1,3 @@
-// ios picker value아직 정해지지도 않았는데 done눌러 나오면 에러뜨게 해야함
-
 import React, {Component} from 'react';
 import {
   SafeAreaView,
@@ -18,8 +16,6 @@ import {WheelPicker} from 'react-native-wheel-picker-android';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import v4 from 'uuid/v4';
 import LanBox from './mainlanbox';
-import Showdatas from './showdatas';
-import TestScreen from './TestScreen';
 import lanjson from './defaultvalues/lansjson';
 import lans from './defaultvalues/lans';
 import colorselect from './defaultvalues/colors';
@@ -39,6 +35,8 @@ export default class HomeScreen extends Component {
     deleting: false,
     lanboxrefs: {},
     cansubmit: false, // make user submit only after language selected
+    goTest: false,
+    enablebtn: true,
   };
 
   componentDidMount = async () => {
@@ -129,13 +127,39 @@ export default class HomeScreen extends Component {
     return returnval;
   };
 
-  _clickbtn = (item) => {
-    if (item.id != 'add') {
-      this.props.navigation.navigate('Datas', {
-        item: item,
-      });
+  _clickLanBox = (item) => {
+    const {goTest, lanboxrefs} = this.state;
+    if (goTest) {
+      if (item.id != 'add') {
+        Object.values(lanboxrefs).map((lanbox) => {
+          lanbox.forceUpdate(() => {
+            lanbox.setState({
+              goTestPage: false,
+            });
+          });
+        });
+        this.setState(
+          {
+            goTest: false,
+          },
+          async () => {
+            const beforeparse = await AsyncStorage.getItem(item.code + '');
+            const parsed = JSON.parse(beforeparse);
+            this.props.navigation.navigate('Testscreen', {
+              info: item,
+              datas: parsed,
+            });
+          },
+        );
+      }
     } else {
-      this.RBSheet.open();
+      if (item.id != 'add') {
+        this.props.navigation.navigate('Datas', {
+          item: item,
+        });
+      } else {
+        this.RBSheet.open();
+      }
     }
   };
 
@@ -210,7 +234,19 @@ export default class HomeScreen extends Component {
   };
 
   _gotoTestScreen = () => {
-    this.props.navigation.navigate('Testscreen');
+    const {lanboxrefs, goTest, enablebtn} = this.state;
+    // this.props.navigation.navigate('Testscreen');
+    Object.values(lanboxrefs).map((lanbox) => {
+      lanbox.forceUpdate(() => {
+        lanbox.setState({
+          goTestPage: !lanbox.state.goTestPage,
+        });
+      });
+    });
+    this.setState({
+      goTest: !goTest,
+      enablebtn: !enablebtn,
+    });
   };
 
   render() {
@@ -223,6 +259,7 @@ export default class HomeScreen extends Component {
       addlan,
       deleting,
       cansubmit,
+      enablebtn,
     } = this.state;
     return !isloaded ? ( // loading
       <View
@@ -241,6 +278,7 @@ export default class HomeScreen extends Component {
           <Text style={styles.nametxt}>Vocabulary App</Text>
           <TouchableOpacity
             style={styles.editbtn}
+            disabled={!enablebtn}
             onPress={this._toggleDeletebox}>
             {deleting ? (
               <MaterialIcons name={'check'} size={30} />
@@ -258,14 +296,14 @@ export default class HomeScreen extends Component {
             }}>
             {datas.map((item) => (
               <TouchableOpacity
-                onPress={() => this._clickbtn(item)}
-                disabled={deleting}
+                onPress={() => this._clickLanBox(item)}
+                disabled={item.id == 'add' ? !enablebtn || deleting : deleting}
                 key={item.id}>
                 <LanBox
                   item={item}
                   ref={(ref) => {
                     let refs = this.state.lanboxrefs;
-                    refs[item.code] = ref;
+                    refs[item.id == 'add' ? item.id : item.code] = ref;
                   }}
                 />
               </TouchableOpacity>

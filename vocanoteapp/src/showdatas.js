@@ -2,31 +2,21 @@ import React, {Component} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  ScrollView,
   View,
   Text,
   Dimensions,
-  TouchableWithoutFeedback,
   TouchableOpacity,
-  Platform,
   Modal,
   TextInput,
 } from 'react-native';
-import {
-  PowerTranslator,
-  ProviderTypes,
-  TranslatorConfiguration,
-  TranslatorFactory,
-} from 'react-native-power-translator';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {SwipeListView, SwipeRow} from 'react-native-swipe-list-view';
+import {SwipeListView} from 'react-native-swipe-list-view';
 import v4 from 'uuid/v4';
-import HomeScreen from './HomeScreen';
 
 const pwidth = Dimensions.get('window').width;
-const API_KEY = 'AIzaSyAUf_YUFn0FhwQU8grgK90NmRtDGooxUkU';
+const API_KEY = 'a354f15846c295907ffa112868b14fcd';
 
 export default class Showdatas extends Component {
   state = {
@@ -56,24 +46,25 @@ export default class Showdatas extends Component {
     });
   };
 
-  _translateWords = async () => {
+  _translateKakao = async () => {
     const {txt, code} = this.state;
-    // translate Korean address to English
-    TranslatorConfiguration.setConfig(
-      ProviderTypes.Google,
-      API_KEY,
-      'ko', // target lang
-      code + '',
-    );
-    const translator = await TranslatorFactory.createTranslator();
-    return translator.translate(txt, 'ko').then(
-      (res) => {
-        return res;
+    const option = {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: `KakaoAK ${API_KEY}`,
       },
-      (error) => {
-        alert('번역 실패');
-      },
-    );
+    };
+    return fetch(
+      `https://dapi.kakao.com/v2/translation/translate?query=${txt}&src_lang=${code}&target_lang=kr`,
+      option,
+    )
+      .then((res) => res.json())
+      .then((json) => {
+        console.log(json);
+        return json.translated_text[0][0].split('.')[0];
+      });
   };
 
   _back = () => {
@@ -103,7 +94,8 @@ export default class Showdatas extends Component {
   // data 저장 후 close
   _modalsaveclose = async () => {
     const {vocadatas, txt} = this.state;
-    await this._translateWords().then((res) => {
+    await this._translateKakao().then((res) => {
+      console.log(res);
       const id = v4() + '';
       const item = vocadatas;
       const newdata = {

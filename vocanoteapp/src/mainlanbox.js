@@ -59,10 +59,11 @@ export default class LanBox extends Component {
 
     this.setState({
       isdeleting: false,
+      goTestPage: false,
     });
   };
   render() {
-    const {isdeleting} = this.state;
+    const {isdeleting, goTestPage} = this.state;
     return this.props.item.id != 'add' ? (
       <View style={[styles.lanbox, this.props.item.bcolors]}>
         {isdeleting && (
@@ -78,7 +79,11 @@ export default class LanBox extends Component {
             </View>
           </TouchableOpacity>
         )}
-        <Text style={styles.btnname}>{this.props.item.name}</Text>
+        <Text style={styles.btnname}>
+          {goTestPage
+            ? this.props.item.name + '\n테스트'
+            : this.props.item.name}
+        </Text>
       </View>
     ) : (
       // add는 따로 구현

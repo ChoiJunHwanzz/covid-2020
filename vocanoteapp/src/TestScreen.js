@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -17,10 +17,14 @@ const _gotoHome = (navigation) => {
   navigation.goBack();
 };
 
-function TestScreen({navigation}) {
+function TestScreen({navigation, route}) {
+  const {info, datas} = route.params;
+
   return (
     <View style={styles.main}>
-      <Text>hello test screen</Text>
+      <Text>{JSON.stringify(info)}</Text>
+      <Text>-------------------------</Text>
+      <Text>{JSON.stringify(datas)}</Text>
       <TouchableOpacity
         style={styles.gohomebtn}
         onPress={() => _gotoHome(navigation)}>
