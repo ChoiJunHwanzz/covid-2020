@@ -62,7 +62,6 @@ export default class Showdatas extends Component {
     )
       .then((res) => res.json())
       .then((json) => {
-        console.log(json);
         return json.translated_text[0][0].split('.')[0];
       });
   };
@@ -95,7 +94,6 @@ export default class Showdatas extends Component {
   _modalsaveclose = async () => {
     const {vocadatas, txt} = this.state;
     await this._translateKakao().then((res) => {
-      console.log(res);
       const id = v4() + '';
       const item = vocadatas;
       const newdata = {

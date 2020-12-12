@@ -128,7 +128,7 @@ export default class HomeScreen extends Component {
   };
 
   _clickLanBox = (item) => {
-    const {goTest, lanboxrefs} = this.state;
+    const {goTest, lanboxrefs, enablebtn} = this.state;
     if (goTest) {
       if (item.id != 'add') {
         Object.values(lanboxrefs).map((lanbox) => {
@@ -141,14 +141,19 @@ export default class HomeScreen extends Component {
         this.setState(
           {
             goTest: false,
+            enablebtn: !enablebtn,
           },
           async () => {
             const beforeparse = await AsyncStorage.getItem(item.code + '');
             const parsed = JSON.parse(beforeparse);
-            this.props.navigation.navigate('Testscreen', {
-              info: item,
-              datas: parsed,
-            });
+            if (parsed == null) {
+              alert('단어가 존재하지 않습니다\n먼저 단어를 추가해주세요');
+            } else {
+              this.props.navigation.navigate('Testscreen', {
+                info: item,
+                datas: parsed,
+              });
+            }
           },
         );
       }
