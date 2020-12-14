@@ -4,8 +4,9 @@
 
 > ## main screen
 >
-> - 기본적인 메인화면 구성입니다.
->   <img src="./image/ios.png" width="300"><img src="./image/android.jpeg" width="300"><br>
+> - 기본적인 메인화면 구성입니다.<br>
+>   <img src="./image/ios.PNG" width="300">
+>   <img src="./image/android.jpeg" width="300"><br>
 
 # Go To Wiki page
 
