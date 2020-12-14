@@ -8,6 +8,8 @@ import {
   Platform,
   Dimensions,
   TouchableOpacity,
+  BackHandler,
+  Alert,
 } from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -39,7 +41,20 @@ export default class HomeScreen extends Component {
     enablebtn: true,
   };
 
+  backAction = () => {
+    Alert.alert('종료', '정말로 종료하시겠습니까?', [
+      {
+        text: '취소',
+        onPress: () => null,
+        style: 'cancel',
+      },
+      {text: '확인', onPress: () => BackHandler.exitApp()},
+    ]);
+    return true;
+  };
+
   componentDidMount = async () => {
+    BackHandler.addEventListener('hardwareBackPress', this.backAction);
     this._getAddableDatas();
     this._getLanBoxDatas();
     this._getColors();
@@ -149,7 +164,7 @@ export default class HomeScreen extends Component {
             if (parsed == null) {
               alert('단어가 존재하지 않습니다\n먼저 단어를 추가해주세요');
             } else {
-              this.props.navigation.navigate('Testscreen', {
+              this.props.navigation.push('Testscreen', {
                 info: item,
                 datas: parsed,
               });
@@ -159,7 +174,7 @@ export default class HomeScreen extends Component {
       }
     } else {
       if (item.id != 'add') {
-        this.props.navigation.navigate('Datas', {
+        this.props.navigation.push('Datas', {
           item: item,
         });
       } else {

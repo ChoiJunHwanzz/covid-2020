@@ -67,7 +67,7 @@ export default class Showdatas extends Component {
   };
 
   _back = () => {
-    this.props.navigation.goBack();
+    this.props.navigation.popToTop();
   };
 
   _openModal = () => {
@@ -182,81 +182,83 @@ export default class Showdatas extends Component {
         </SafeAreaView>
 
         {/* 데이터 나열 */}
-        <SwipeListView
-          data={Object.values(vocadatas)}
-          renderItem={(item, rowmap) => {
-            return (
-              <View style={{...styles.datas, backgroundColor: color}}>
-                <View style={styles.datadetails}>
-                  <TouchableOpacity
-                    style={styles.checkboxbtn}
-                    onPress={() => this._toggleDone(item.item)}>
-                    <EntypoIcon
-                      name="check"
-                      style={
-                        item.item.Done
-                          ? {...styles.checkbox, color: '#dfdfdf'}
-                          : styles.checkbox
-                      }></EntypoIcon>
-                  </TouchableOpacity>
-                  <View style={styles.words}>
-                    <Text
-                      style={
-                        item.item.Done
-                          ? {
-                              ...styles.word,
-                              color: '#dfdfdf',
-                              textDecorationLine: 'line-through',
-                            }
-                          : styles.word
-                      }>
-                      {item.item.word}
-                    </Text>
-                    <Text
-                      style={
-                        item.item.Done
-                          ? {
-                              ...styles.translated,
-                              color: '#dfdfdf',
-                              textDecorationLine: 'line-through',
-                            }
-                          : styles.translated
-                      }>
-                      {item.item.translated}
-                    </Text>
+        <View style={{width: pwidth, alignItems: 'center'}}>
+          <SwipeListView
+            data={Object.values(vocadatas)}
+            renderItem={(item, rowmap) => {
+              return (
+                <View style={{...styles.datas, backgroundColor: color}}>
+                  <View style={styles.datadetails}>
+                    <TouchableOpacity
+                      style={styles.checkboxbtn}
+                      onPress={() => this._toggleDone(item.item)}>
+                      <EntypoIcon
+                        name="check"
+                        style={
+                          item.item.Done
+                            ? {...styles.checkbox, color: '#dfdfdf'}
+                            : styles.checkbox
+                        }></EntypoIcon>
+                    </TouchableOpacity>
+                    <View style={styles.words}>
+                      <Text
+                        style={
+                          item.item.Done
+                            ? {
+                                ...styles.word,
+                                color: '#dfdfdf',
+                                textDecorationLine: 'line-through',
+                              }
+                            : styles.word
+                        }>
+                        {item.item.word}
+                      </Text>
+                      <Text
+                        style={
+                          item.item.Done
+                            ? {
+                                ...styles.translated,
+                                color: '#dfdfdf',
+                                textDecorationLine: 'line-through',
+                              }
+                            : styles.translated
+                        }>
+                        {item.item.translated}
+                      </Text>
+                    </View>
                   </View>
                 </View>
-              </View>
-            );
-          }}
-          renderHiddenItem={(rowData, rowMap) => {
-            return (
-              <View
-                style={{
-                  ...styles.datas,
-                  backgroundColor: '#0000',
-                  alignItems: 'center',
-                  flex: 1,
-                }}>
-                <TouchableOpacity
+              );
+            }}
+            renderHiddenItem={(rowData, rowMap) => {
+              return (
+                <View
                   style={{
-                    ...styles.rightswipebtn,
-                    backgroundColor: color + 'cc',
-                  }}
-                  onPress={() => {
-                    this._rightswipebtn(rowData.item.id);
+                    ...styles.datas,
+                    backgroundColor: '#0000',
+                    alignItems: 'center',
+                    flex: 1,
                   }}>
-                  <Text style={{...styles.swipetxt}}>Delete</Text>
-                </TouchableOpacity>
-              </View>
-            );
-          }}
-          disableRightSwipe
-          rightOpenValue={-100}
-          stopRightSwipe={-100}
-          closeOnRowPress={true}
-          keyExtractor={(item) => item.id}
-        />
+                  <TouchableOpacity
+                    style={{
+                      ...styles.rightswipebtn,
+                      backgroundColor: color + 'cc',
+                    }}
+                    onPress={() => {
+                      this._rightswipebtn(rowData.item.id);
+                    }}>
+                    <Text style={{...styles.swipetxt}}>Delete</Text>
+                  </TouchableOpacity>
+                </View>
+              );
+            }}
+            disableRightSwipe
+            rightOpenValue={-100}
+            stopRightSwipe={-100}
+            closeOnRowPress={true}
+            keyExtractor={(item) => item.id}
+          />
+        </View>
 
         {/* modal start */}
         <Modal

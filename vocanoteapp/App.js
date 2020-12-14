@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler';
 import React from 'react';
+import {Platform} from 'react-native';
 import {
   NavigationContainer,
   StackViewTransitionConfigs,
@@ -13,6 +14,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import HomeScreen from './src/HomeScreen';
 import TestScreen from './src/TestScreen';
 import Showdatas from './src/showdatas';
+import ResultScreen from './src/ResultScreen';
 
 const Stack = createStackNavigator();
 
@@ -36,7 +38,6 @@ export default function App() {
           component={TestScreen}
           options={({route}) => ({
             headerLeft: (props) => (
-              // <HeaderBackButton {...props} />
               <MaterialIcons
                 name={'arrow-back-ios'}
                 {...props}
@@ -52,7 +53,7 @@ export default function App() {
             },
             headerStyle: {
               backgroundColor: '#76C1E2',
-              height: 90,
+              // height: 90,
             },
             // headerBackAllowFontScaling: true,
             headerTransparent: true,
@@ -74,6 +75,36 @@ export default function App() {
             gestureEnabled: true,
             gestureDirection: 'horizontal',
           }}
+        />
+        <Stack.Screen
+          name="ResultScreen"
+          component={ResultScreen}
+          options={({navigation}) => ({
+            headerLeft: (props) => (
+              <MaterialIcons
+                name={'arrow-back-ios'}
+                {...props}
+                size={30}
+                style={{color: '#f1f1f1'}}
+                onPress={() => navigation.pop()}
+              />
+            ),
+            headerLeftContainerStyle: {
+              fontSize: 30,
+              width: 50,
+              alignItems: 'center',
+            },
+            headerTransparent: true,
+            title: 'Result',
+            headerTintColor: '#f1f1f1',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+              fontSize: 30,
+            },
+            headerTitleAlign: 'center',
+            gestureEnabled: true,
+            gestureDirection: 'horizontal',
+          })}
         />
       </Stack.Navigator>
     </NavigationContainer>
