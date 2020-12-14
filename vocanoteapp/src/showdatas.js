@@ -438,6 +438,7 @@ const styles = StyleSheet.create({
   },
   modaltxtinput: {
     marginBottom: 15,
+    textAlign: 'center',
   },
   openButton: {
     backgroundColor: 'rgba(242,149,95,1)',

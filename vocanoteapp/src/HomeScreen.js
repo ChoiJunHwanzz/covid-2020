@@ -58,6 +58,7 @@ export default class HomeScreen extends Component {
     this._getAddableDatas();
     this._getLanBoxDatas();
     this._getColors();
+    // this.touchable.setOpacityTo(10);
   };
 
   _getAddableDatas = async () => {
@@ -317,6 +318,7 @@ export default class HomeScreen extends Component {
             {datas.map((item) => (
               <TouchableOpacity
                 onPress={() => this._clickLanBox(item)}
+                activeOpacity={Platform.OS == 'android' ? 0.9 : 0.5}
                 disabled={item.id == 'add' ? !enablebtn || deleting : deleting}
                 key={item.id}>
                 <LanBox
@@ -330,6 +332,7 @@ export default class HomeScreen extends Component {
             ))}
             <TouchableOpacity
               disabled={deleting}
+              activeOpacity={Platform.OS == 'android' ? 0.9 : 0.5}
               onPress={this._gotoTestScreen}>
               <View style={{...styles.testbox, backgroundColor: '#76C1E2'}}>
                 <Text
