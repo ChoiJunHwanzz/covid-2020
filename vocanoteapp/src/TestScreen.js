@@ -56,6 +56,7 @@ function TestScreen({navigation, route}) {
   };
 
   const datasBlock = (word, idx) => {
+    console.log(idx);
     return (
       <TouchableWithoutFeedback
         onPress={() => {
@@ -64,7 +65,11 @@ function TestScreen({navigation, route}) {
         }}>
         <View style={styles.reviewdatas}>
           <TouchableOpacity
-            style={{...styles.moveBoxBtn, left: 10}}
+            style={
+              idx == 0
+                ? {...styles.moveBoxBtn, left: 10, display: 'none'}
+                : {...styles.moveBoxBtn, left: 10}
+            }
             onPress={() => {
               _onMovePage(word);
               wordBox.snapToPrev();
@@ -87,7 +92,11 @@ function TestScreen({navigation, route}) {
             />
           </View>
           <TouchableOpacity
-            style={{...styles.moveBoxBtn, right: 10}}
+            style={
+              idx !== Object.values(datas).length - 1
+                ? {...styles.moveBoxBtn, right: 10}
+                : {...styles.moveBoxBtn, right: 10, display: 'none'}
+            }
             onPress={() => {
               _onMovePage(word);
               wordBox.snapToNext();
@@ -114,7 +123,7 @@ function TestScreen({navigation, route}) {
           ref={(ref) => (wordBox = ref)}
           layout={'default'}
           data={Object.values(datas)}
-          renderItem={({item, idx}) => datasBlock(item, idx)}
+          renderItem={({item, index}) => datasBlock(item, index)}
           sliderWidth={pwidth}
           itemWidth={pwidth - 50}
           scrollEnabled={false}

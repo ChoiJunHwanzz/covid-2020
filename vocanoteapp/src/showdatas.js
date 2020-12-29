@@ -8,12 +8,14 @@ import {
   TouchableOpacity,
   Modal,
   TextInput,
+  Platform,
 } from 'react-native';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import v4 from 'uuid/v4';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const pwidth = Dimensions.get('window').width;
 const API_KEY = 'a354f15846c295907ffa112868b14fcd';
@@ -21,6 +23,7 @@ const API_KEY = 'a354f15846c295907ffa112868b14fcd';
 export default class Showdatas extends Component {
   state = {
     txt: '', // before translated
+    sectxt: '', // user input meaning
     name: this.props.route.params.item.name, // lan name
     code: this.props.route.params.item.code, // lan code
     color: this.props.route.params.item.bcolors.backgroundColor, // lan color
@@ -90,8 +93,8 @@ export default class Showdatas extends Component {
     await AsyncStorage.setItem(code + '', savedata);
   };
 
-  // data 저장 후 close
-  _modalsaveclose = async () => {
+  // translated data 저장 후 close
+  _modaltrsaveclose = async () => {
     const {vocadatas, txt} = this.state;
     await this._translateKakao().then((res) => {
       const id = v4() + '';
@@ -118,6 +121,39 @@ export default class Showdatas extends Component {
         modalvisible: false,
       });
     });
+  };
+
+  // user input data save & close
+  _modalsaveclose = async () => {
+    const {vocadatas, txt, sectxt} = this.state;
+
+    if (sectxt === '') {
+      alert('뜻을 입력해주세요');
+    } else {
+      const id = v4() + '';
+      const item = vocadatas;
+      const newdata = {
+        id: id,
+        word: txt,
+        translated: sectxt,
+        Done: false,
+      };
+      item[id] = newdata;
+      this.setState((prev) => {
+        const newstate = {
+          ...prev,
+          vocadatas: {
+            ...item,
+            ...prev.vocadatas,
+          },
+        };
+        this._saveToAsyncStorage();
+        return {...newstate};
+      });
+      this.setState({
+        modalvisible: false,
+      });
+    }
   };
 
   // dataitems.js
@@ -182,83 +218,81 @@ export default class Showdatas extends Component {
         </SafeAreaView>
 
         {/* 데이터 나열 */}
-        <View style={{width: pwidth, alignItems: 'center'}}>
-          <SwipeListView
-            data={Object.values(vocadatas)}
-            renderItem={(item, rowmap) => {
-              return (
-                <View style={{...styles.datas, backgroundColor: color}}>
-                  <View style={styles.datadetails}>
-                    <TouchableOpacity
-                      style={styles.checkboxbtn}
-                      onPress={() => this._toggleDone(item.item)}>
-                      <EntypoIcon
-                        name="check"
-                        style={
-                          item.item.Done
-                            ? {...styles.checkbox, color: '#dfdfdf'}
-                            : styles.checkbox
-                        }></EntypoIcon>
-                    </TouchableOpacity>
-                    <View style={styles.words}>
-                      <Text
-                        style={
-                          item.item.Done
-                            ? {
-                                ...styles.word,
-                                color: '#dfdfdf',
-                                textDecorationLine: 'line-through',
-                              }
-                            : styles.word
-                        }>
-                        {item.item.word}
-                      </Text>
-                      <Text
-                        style={
-                          item.item.Done
-                            ? {
-                                ...styles.translated,
-                                color: '#dfdfdf',
-                                textDecorationLine: 'line-through',
-                              }
-                            : styles.translated
-                        }>
-                        {item.item.translated}
-                      </Text>
-                    </View>
+        <SwipeListView
+          data={Object.values(vocadatas)}
+          renderItem={(item, rowmap) => {
+            return (
+              <View style={{...styles.datas, backgroundColor: color}}>
+                <View style={styles.datadetails}>
+                  <TouchableOpacity
+                    style={styles.checkboxbtn}
+                    onPress={() => this._toggleDone(item.item)}>
+                    <EntypoIcon
+                      name="check"
+                      style={
+                        item.item.Done
+                          ? {...styles.checkbox, color: '#dfdfdf'}
+                          : styles.checkbox
+                      }></EntypoIcon>
+                  </TouchableOpacity>
+                  <View style={styles.words}>
+                    <Text
+                      style={
+                        item.item.Done
+                          ? {
+                              ...styles.word,
+                              color: '#dfdfdf',
+                              textDecorationLine: 'line-through',
+                            }
+                          : styles.word
+                      }>
+                      {item.item.word}
+                    </Text>
+                    <Text
+                      style={
+                        item.item.Done
+                          ? {
+                              ...styles.translated,
+                              color: '#dfdfdf',
+                              textDecorationLine: 'line-through',
+                            }
+                          : styles.translated
+                      }>
+                      {item.item.translated}
+                    </Text>
                   </View>
                 </View>
-              );
-            }}
-            renderHiddenItem={(rowData, rowMap) => {
-              return (
-                <View
+              </View>
+            );
+          }}
+          renderHiddenItem={(rowData, rowMap) => {
+            return (
+              <View
+                style={{
+                  ...styles.datas,
+                  backgroundColor: '#0000',
+                  alignItems: 'center',
+                  flex: 1,
+                }}>
+                <TouchableOpacity
                   style={{
-                    ...styles.datas,
-                    backgroundColor: '#0000',
-                    alignItems: 'center',
-                    flex: 1,
+                    ...styles.rightswipebtn,
+                    backgroundColor: color + 'cc',
+                  }}
+                  onPress={() => {
+                    this._rightswipebtn(rowData.item.id);
                   }}>
-                  <TouchableOpacity
-                    style={{
-                      ...styles.rightswipebtn,
-                      backgroundColor: color + 'cc',
-                    }}
-                    onPress={() => {
-                      this._rightswipebtn(rowData.item.id);
-                    }}>
-                    <Text style={{...styles.swipetxt}}>Delete</Text>
-                  </TouchableOpacity>
-                </View>
-              );
-            }}
-            disableRightSwipe
-            rightOpenValue={-100}
-            stopRightSwipe={-100}
-            closeOnRowPress={true}
-            keyExtractor={(item) => item.id}
-          />
-        </View>
+                  <Text style={{...styles.swipetxt}}>Delete</Text>
+                </TouchableOpacity>
+              </View>
+            );
+          }}
+          disableRightSwipe
+          rightOpenValue={-100}
+          closeOnRowPress={true}
+          keyExtractor={(item) => item.id}
+          showsVerticalScrollIndicator={false}
+        />
 
         {/* modal start */}
         <Modal
@@ -282,15 +316,32 @@ export default class Showdatas extends Component {
                     txt: txt,
                   });
                 }}
-                placeholder={'여기에 입력'}
+                placeholder={'단어 입력'}
                 placeholderTextColor={'#dfdfdf'}
                 autoFocus={true}
               />
-              <TouchableOpacity
-                style={{...styles.openButton, backgroundColor: color}}
-                onPress={this._modalsaveclose}>
-                <Text style={styles.textStyle}>추가</Text>
-              </TouchableOpacity>
+              <TextInput
+                style={styles.modaltxtinput}
+                onChangeText={(txt) => {
+                  this.setState({
+                    sectxt: txt,
+                  });
+                }}
+                placeholder={'뜻 입력'}
+                placeholderTextColor={'#dfdfdf'}
+              />
+              <View style={styles.modaladdbtns}>
+                <TouchableOpacity
+                  style={{...styles.modaladdbtn, backgroundColor: color}}
+                  onPress={this._modalsaveclose}>
+                  <Text style={styles.textStyle}>추가</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{...styles.modaladdbtn, backgroundColor: color}}
+                  onPress={this._modaltrsaveclose}>
+                  <Text style={styles.textStyle}>{'번역 & 추가'}</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </Modal>
@@ -314,7 +365,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     flexDirection: 'row',
-    marginBottom: 25,
+    zIndex: 1,
+    ...Platform.select({
+      ios: {
+        shadowOffset: {
+          height: 5,
+        },
+        shadowOpacity: 0.2,
+      },
+      android: {
+        elevation: 10,
+      },
+    }),
   },
   backbtn: {
     alignItems: 'center',
@@ -412,11 +474,13 @@ const styles = StyleSheet.create({
   },
   modalView: {
     width: pwidth * 0.75,
-    height: 150,
+    height: 180,
     backgroundColor: 'white',
     borderRadius: 20,
-    padding: 35,
+    padding: 10,
+    paddingTop: 35,
     alignItems: 'center',
+    justifyContent: 'space-around',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -439,13 +503,22 @@ const styles = StyleSheet.create({
   modaltxtinput: {
     marginBottom: 15,
     textAlign: 'center',
+    fontSize: 20,
   },
   openButton: {
-    backgroundColor: 'rgba(242,149,95,1)',
     borderRadius: 20,
     padding: 10,
-    elevation: 2,
     width: 70,
+  },
+  modaladdbtns: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: 200,
+  },
+  modaladdbtn: {
+    borderRadius: 20,
+    padding: 10,
+    width: 95,
   },
   textStyle: {
     color: 'white',

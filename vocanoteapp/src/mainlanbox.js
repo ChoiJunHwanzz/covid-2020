@@ -56,7 +56,6 @@ export default class LanBox extends Component {
 
     const parsedaddable = JSON.stringify(addableparsed);
     await AsyncStorage.setItem('addableLan', parsedaddable);
-
     this.setState({
       isdeleting: false,
       goTestPage: false,

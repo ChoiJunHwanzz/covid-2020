@@ -232,6 +232,7 @@ export default class HomeScreen extends Component {
     if (deleting) {
       await this._getAddableDatas();
       await this._getLanBoxDatas();
+      await this._getColors();
     }
     Object.values(lanboxrefs).map((lanbox) => {
       try {
