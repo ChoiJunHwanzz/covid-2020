@@ -56,7 +56,6 @@ function TestScreen({navigation, route}) {
   };
 
   const datasBlock = (word, idx) => {
-    console.log(idx);
     return (
       <TouchableWithoutFeedback
         onPress={() => {

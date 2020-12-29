@@ -55,7 +55,11 @@ function ResultScreen({navigation, route}) {
     return (
       <View style={styles.reviewdatas}>
         <TouchableOpacity
-          style={{...styles.moveBoxBtn, left: 10}}
+          style={
+            idx !== 0
+              ? {...styles.moveBoxBtn, left: 10}
+              : {...styles.moveBoxBtn, left: 10, display: 'none'}
+          }
           onPress={() => {
             wrongBox.snapToPrev();
           }}>
@@ -71,7 +75,11 @@ function ResultScreen({navigation, route}) {
           </Text>
         </View>
         <TouchableOpacity
-          style={{...styles.moveBoxBtn, right: 10}}
+          style={
+            idx !== wrong.length - 1
+              ? {...styles.moveBoxBtn, right: 10}
+              : {...styles.moveBoxBtn, right: 10, display: 'none'}
+          }
           onPress={() => {
             wrongBox.snapToNext();
           }}>
@@ -88,7 +96,11 @@ function ResultScreen({navigation, route}) {
     return (
       <View style={styles.reviewdatas}>
         <TouchableOpacity
-          style={{...styles.moveBoxBtn, left: 10}}
+          style={
+            idx !== 0
+              ? {...styles.moveBoxBtn, left: 10}
+              : {...styles.moveBoxBtn, left: 10, display: 'none'}
+          }
           onPress={() => {
             correctBox.snapToPrev();
           }}>
@@ -99,7 +111,11 @@ function ResultScreen({navigation, route}) {
           <Text style={styles.resultWord}>{word.result}</Text>
         </View>
         <TouchableOpacity
-          style={{...styles.moveBoxBtn, right: 10}}
+          style={
+            idx !== correct.length - 1
+              ? {...styles.moveBoxBtn, right: 10}
+              : {...styles.moveBoxBtn, right: 10, display: 'none'}
+          }
           onPress={() => {
             correctBox.snapToNext();
           }}>
@@ -143,7 +159,7 @@ function ResultScreen({navigation, route}) {
                   },
                 ]
           }
-          renderItem={({item, idx}) => wrongBlock(item, idx)}
+          renderItem={({item, index}) => wrongBlock(item, index)}
           sliderWidth={pwidth}
           itemWidth={pwidth - 50}
           scrollEnabled={wrong.length > 0}
@@ -163,7 +179,7 @@ function ResultScreen({navigation, route}) {
               ? correct
               : [{word: '맞춘 단어가 없습니다.', result: '다시 도전해보세요!'}]
           }
-          renderItem={({item, idx}) => correctBlock(item, idx)}
+          renderItem={({item, index}) => correctBlock(item, index)}
           sliderWidth={pwidth}
           itemWidth={pwidth - 50}
           scrollEnabled={correct.length > 0}
@@ -183,7 +199,7 @@ function ResultScreen({navigation, route}) {
             navigation.popToTop();
           }}>
           <View style={styles.exceptview}>
-            <Text style={styles.excepttxt}>맞은 단어 단어장에서 삭제하기</Text>
+            <Text style={styles.excepttxt}>맞은 단어 삭제</Text>
           </View>
         </TouchableOpacity>
       )}

@@ -222,7 +222,12 @@ export default class Showdatas extends Component {
           data={Object.values(vocadatas)}
           renderItem={(item, rowmap) => {
             return (
-              <View style={{...styles.datas, backgroundColor: color}}>
+              <View
+                style={
+                  item.index === 0
+                    ? {...styles.datas, backgroundColor: color, marginTop: 10}
+                    : {...styles.datas, backgroundColor: color}
+                }>
                 <View style={styles.datadetails}>
                   <TouchableOpacity
                     style={styles.checkboxbtn}
@@ -268,12 +273,22 @@ export default class Showdatas extends Component {
           renderHiddenItem={(rowData, rowMap) => {
             return (
               <View
-                style={{
-                  ...styles.datas,
-                  backgroundColor: '#0000',
-                  alignItems: 'center',
-                  flex: 1,
-                }}>
+                style={
+                  rowData.index === 0
+                    ? {
+                        ...styles.datas,
+                        backgroundColor: '#0000',
+                        alignItems: 'center',
+                        flex: 1,
+                        marginTop: 10,
+                      }
+                    : {
+                        ...styles.datas,
+                        backgroundColor: '#0000',
+                        alignItems: 'center',
+                        flex: 1,
+                      }
+                }>
                 <TouchableOpacity
                   style={{
                     ...styles.rightswipebtn,
