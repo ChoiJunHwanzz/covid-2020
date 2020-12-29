@@ -58,7 +58,10 @@ export default class HomeScreen extends Component {
     this._getAddableDatas();
     this._getLanBoxDatas();
     this._getColors();
-    // this.touchable.setOpacityTo(10);
+  };
+
+  componentWillUnmount = () => {
+    BackHandler.removeEventListener('hardwareBackPress');
   };
 
   _getAddableDatas = async () => {

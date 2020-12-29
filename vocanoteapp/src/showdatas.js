@@ -9,15 +9,16 @@ import {
   Modal,
   TextInput,
   Platform,
+  Alert,
 } from 'react-native';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import v4 from 'uuid/v4';
-import {ScrollView} from 'react-native-gesture-handler';
 
 const pwidth = Dimensions.get('window').width;
+const pheight = Dimensions.get('window').height;
 const API_KEY = 'a354f15846c295907ffa112868b14fcd';
 
 export default class Showdatas extends Component {
@@ -30,6 +31,8 @@ export default class Showdatas extends Component {
     clicked: false, // to go back
     modalvisible: false, // to show modal
     vocadatas: {}, // save voca datas
+    togtr: false, // to toggle translate automatically
+    toglan: false, // to toggle target language
   };
   componentDidMount = () => {
     this._getDatas();
@@ -50,7 +53,7 @@ export default class Showdatas extends Component {
   };
 
   _translateKakao = async () => {
-    const {txt, code} = this.state;
+    const {txt, code, toglan} = this.state;
     const option = {
       method: 'GET',
       headers: {
@@ -59,14 +62,25 @@ export default class Showdatas extends Component {
         Authorization: `KakaoAK ${API_KEY}`,
       },
     };
-    return fetch(
-      `https://dapi.kakao.com/v2/translation/translate?query=${txt}&src_lang=${code}&target_lang=kr`,
-      option,
-    )
-      .then((res) => res.json())
-      .then((json) => {
-        return json.translated_text[0][0].split('.')[0];
-      });
+    if (toglan) {
+      return fetch(
+        `https://dapi.kakao.com/v2/translation/translate?query=${txt}&src_lang=kr&target_lang=${code}`,
+        option,
+      )
+        .then((res) => res.json())
+        .then((json) => {
+          return json.translated_text[0][0].split('.')[0];
+        });
+    } else {
+      return fetch(
+        `https://dapi.kakao.com/v2/translation/translate?query=${txt}&src_lang=${code}&target_lang=kr`,
+        option,
+      )
+        .then((res) => res.json())
+        .then((json) => {
+          return json.translated_text[0][0].split('.')[0];
+        });
+    }
   };
 
   _back = () => {
@@ -83,6 +97,8 @@ export default class Showdatas extends Component {
   _modalclose = () => {
     this.setState({
       modalvisible: false,
+      togtr: false,
+      toglan: false,
     });
   };
 
@@ -96,63 +112,84 @@ export default class Showdatas extends Component {
   // translated data 저장 후 close
   _modaltrsaveclose = async () => {
     const {vocadatas, txt} = this.state;
-    await this._translateKakao().then((res) => {
-      const id = v4() + '';
-      const item = vocadatas;
-      const newdata = {
-        id: id,
-        word: txt,
-        translated: res,
-        Done: false,
-      };
-      item[id] = newdata;
-      this.setState((prev) => {
-        const newstate = {
-          ...prev,
-          vocadatas: {
-            ...item,
-            ...prev.vocadatas,
-          },
-        };
-        this._saveToAsyncStorage();
-        return {...newstate};
+    if (txt === '') {
+      alert('단어를 입력해주세요');
+    } else {
+      await this._translateKakao().then((res) => {
+        if (typeof res != 'string' || res === '') {
+          alert('번역에 실패했습니다.');
+          this.txtref.clear();
+        } else {
+          const id = v4() + '';
+          const item = vocadatas;
+          const newdata = {
+            id: id,
+            word: txt,
+            translated: res,
+            Done: false,
+          };
+          item[id] = newdata;
+          this.setState((prev) => {
+            const newstate = {
+              ...prev,
+              vocadatas: {
+                ...item,
+                ...prev.vocadatas,
+              },
+            };
+            this._saveToAsyncStorage();
+            return {...newstate};
+          });
+          this.setState({
+            modalvisible: false,
+            togtr: false,
+            toglan: false,
+            txt: '',
+            sectxt: '',
+          });
+        }
       });
-      this.setState({
-        modalvisible: false,
-      });
-    });
+    }
   };
 
   // user input data save & close
   _modalsaveclose = async () => {
     const {vocadatas, txt, sectxt} = this.state;
 
-    if (sectxt === '') {
-      alert('뜻을 입력해주세요');
+    if (txt === '') {
+      alert('단어를 입력해주세요!');
     } else {
-      const id = v4() + '';
-      const item = vocadatas;
-      const newdata = {
-        id: id,
-        word: txt,
-        translated: sectxt,
-        Done: false,
-      };
-      item[id] = newdata;
-      this.setState((prev) => {
-        const newstate = {
-          ...prev,
-          vocadatas: {
-            ...item,
-            ...prev.vocadatas,
-          },
+      if (sectxt === '') {
+        alert('뜻을 입력해주세요!');
+      } else {
+        const id = v4() + '';
+        const item = vocadatas;
+        const newdata = {
+          id: id,
+          word: txt,
+          translated: sectxt,
+          Done: false,
         };
-        this._saveToAsyncStorage();
-        return {...newstate};
-      });
-      this.setState({
-        modalvisible: false,
-      });
+        item[id] = newdata;
+        this.setState((prev) => {
+          const newstate = {
+            ...prev,
+            vocadatas: {
+              ...item,
+              ...prev.vocadatas,
+            },
+          };
+          this._saveToAsyncStorage();
+          return {...newstate};
+        });
+        this.setState({
+          modalvisible: false,
+          togtr: false,
+          toglan: false,
+          txt: '',
+          sectxt: '',
+        });
+      }
     }
   };
 
@@ -179,17 +216,28 @@ export default class Showdatas extends Component {
   _toggleDone = (item) => {
     this.setState(
       (prev) => {
+        let newvoca = {}; // toggle해서 저장한 데이터 포함 단어들 데이터 새로 담을 변수
+        Object.values(prev.vocadatas).map((data) => {
+          // map돌면서 하나씩 찾기
+          let voca = {};
+          if (data.id == item.id) {
+            voca = {
+              ...data,
+              Done: !data.Done,
+            };
+          } else {
+            voca = {
+              ...data,
+            };
+          }
+          newvoca[data.id] = voca; // 기존의걸 그대로 담거나 Done을 변경해서 담은 voca변수를 하나씩 담음
+        });
         const newitem = {
+          // 기존의 state와 vocadata를 포함해 return 할 변수
           ...prev,
-          vocadatas: {
-            ...prev.vocadatas,
-            [item.id]: {
-              ...prev.vocadatas[item.id],
-              Done: !item.Done,
-            },
-          },
+          vocadatas: newvoca,
         };
-        return {...newitem};
+        return {...newitem}; // 이렇게까지 한 이유는 setstate시 안드로이드에서 단어들의 순서가 변경되는 버그때문
       },
       () => {
         this._saveToAsyncStorage();
@@ -198,7 +246,7 @@ export default class Showdatas extends Component {
   };
 
   render() {
-    const {clicked, modalvisible, name, code, vocadatas, color} = this.state;
+    const {modalvisible, name, vocadatas, color} = this.state;
     return (
       <View style={styles.container} ref={(ref) => (this.parent = ref)}>
         <SafeAreaView
@@ -223,11 +271,11 @@ export default class Showdatas extends Component {
           renderItem={(item, rowmap) => {
             return (
               <View
-                style={
-                  item.index === 0
-                    ? {...styles.datas, backgroundColor: color, marginTop: 10}
-                    : {...styles.datas, backgroundColor: color}
-                }>
+                style={{
+                  ...styles.datas,
+                  backgroundColor: color,
+                  marginTop: 10,
+                }}>
                 <View style={styles.datadetails}>
                   <TouchableOpacity
                     style={styles.checkboxbtn}
@@ -273,22 +321,13 @@ export default class Showdatas extends Component {
           renderHiddenItem={(rowData, rowMap) => {
             return (
               <View
-                style={
-                  rowData.index === 0
-                    ? {
-                        ...styles.datas,
-                        backgroundColor: '#0000',
-                        alignItems: 'center',
-                        flex: 1,
-                        marginTop: 10,
-                      }
-                    : {
-                        ...styles.datas,
-                        backgroundColor: '#0000',
-                        alignItems: 'center',
-                        flex: 1,
-                      }
-                }>
+                style={{
+                  ...styles.datas,
+                  backgroundColor: '#0000',
+                  alignItems: 'center',
+                  flex: 1,
+                  marginTop: 10,
+                }}>
                 <TouchableOpacity
                   style={{
                     ...styles.rightswipebtn,
@@ -324,7 +363,45 @@ export default class Showdatas extends Component {
                 onPress={this._modalclose}>
                 <IonIcon name={'close-outline'} style={styles.modalclose} />
               </TouchableOpacity>
+              <View style={styles.toggleTRbtn}>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.setState({
+                      togtr: !this.state.togtr,
+                    });
+                  }}>
+                  {this.state.togtr ? (
+                    <View style={{...styles.toggleout, backgroundColor: color}}>
+                      <View style={[styles.togglein, styles.togglebtn]} />
+                    </View>
+                  ) : (
+                    <View
+                      style={{...styles.toggleout, backgroundColor: '#c1c1c1'}}>
+                      <View style={styles.togglein}></View>
+                    </View>
+                  )}
+                </TouchableOpacity>
+              </View>
+
+              {this.state.togtr && (
+                <TouchableOpacity
+                  style={styles.toglanguage}
+                  onPress={() => {
+                    this.setState({
+                      toglan: !this.state.toglan,
+                    });
+                  }}>
+                  <Text>{name} </Text>
+                  {this.state.toglan ? (
+                    <IonIcon name="arrow-back-outline" />
+                  ) : (
+                    <IonIcon name="arrow-forward-outline" />
+                  )}
+                  <Text> 한국어</Text>
+                </TouchableOpacity>
+              )}
               <TextInput
+                ref={(ref) => (this.txtref = ref)}
                 style={styles.modaltxtinput}
                 onChangeText={(txt) => {
                   this.setState({
@@ -335,28 +412,31 @@ export default class Showdatas extends Component {
                 placeholderTextColor={'#dfdfdf'}
                 autoFocus={true}
               />
-              <TextInput
-                style={styles.modaltxtinput}
-                onChangeText={(txt) => {
-                  this.setState({
-                    sectxt: txt,
-                  });
-                }}
-                placeholder={'뜻 입력'}
-                placeholderTextColor={'#dfdfdf'}
-              />
-              <View style={styles.modaladdbtns}>
-                <TouchableOpacity
-                  style={{...styles.modaladdbtn, backgroundColor: color}}
-                  onPress={this._modalsaveclose}>
-                  <Text style={styles.textStyle}>추가</Text>
-                </TouchableOpacity>
+              {!this.state.togtr && (
+                <TextInput
+                  style={{...styles.modaltxtinput}}
+                  onChangeText={(txt) => {
+                    this.setState({
+                      sectxt: txt,
+                    });
+                  }}
+                  placeholder={'뜻 입력'}
+                  placeholderTextColor={'#dfdfdf'}
+                />
+              )}
+              {this.state.togtr ? (
                 <TouchableOpacity
                   style={{...styles.modaladdbtn, backgroundColor: color}}
                   onPress={this._modaltrsaveclose}>
                   <Text style={styles.textStyle}>{'번역 & 추가'}</Text>
                 </TouchableOpacity>
-              </View>
+              ) : (
+                <TouchableOpacity
+                  style={{...styles.modaladdbtn, backgroundColor: color}}
+                  onPress={this._modalsaveclose}>
+                  <Text style={styles.textStyle}>추가</Text>
+                </TouchableOpacity>
+              )}
             </View>
           </View>
         </Modal>
@@ -416,7 +496,6 @@ const styles = StyleSheet.create({
     height: 80,
     borderRadius: 18,
     flexDirection: 'row',
-    marginBottom: 10,
     padding: 5,
   },
   datadetails: {
@@ -445,14 +524,14 @@ const styles = StyleSheet.create({
   word: {
     left: 10,
     color: '#121212',
-    fontSize: 25,
+    fontSize: 20,
     fontFamily: 'Itim-Regular',
   },
   translated: {
     right: 10,
     color: '#121212',
-    fontSize: 25,
-    fontWeight: 'bold',
+    fontSize: 20,
+    fontFamily: 'Itim-Regular',
   },
   rightswipebtn: {
     height: 80,
@@ -484,18 +563,17 @@ const styles = StyleSheet.create({
   // modal
   centeredView: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
   },
   modalView: {
+    top: pheight / 2 - 180,
     width: pwidth * 0.75,
     height: 180,
     backgroundColor: 'white',
     borderRadius: 20,
-    padding: 10,
-    paddingTop: 35,
+    padding: 25,
     alignItems: 'center',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -510,15 +588,50 @@ const styles = StyleSheet.create({
     left: 10,
     top: 10,
   },
+  toggleTRbtn: {
+    position: 'absolute',
+    right: 10,
+    top: 10,
+    flexDirection: 'row',
+  },
+  toggleout: {
+    height: 25,
+    width: 40,
+    justifyContent: 'center',
+    borderRadius: 13,
+    borderWidth: 2,
+    borderColor: '#e1e1e1',
+  },
+  togglein: {
+    height: 21,
+    width: 21,
+    borderRadius: 11,
+    backgroundColor: 'white',
+  },
+  togglebtn: {
+    transform: [{translateX: 15}],
+  },
+  toglanguage: {
+    borderRadius: 10,
+    backgroundColor: '#fafafa',
+    width: 120,
+    height: 30,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    top: 10,
+  },
   modalclose: {
     fontSize: 25,
     fontWeight: 'bold',
     color: '#b1b1b1',
   },
   modaltxtinput: {
-    marginBottom: 15,
     textAlign: 'center',
     fontSize: 20,
+    padding: 0,
+    marginBottom: 10,
   },
   openButton: {
     borderRadius: 20,
@@ -534,6 +647,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     width: 95,
+    position: 'absolute',
+    bottom: 10,
   },
   textStyle: {
     color: 'white',

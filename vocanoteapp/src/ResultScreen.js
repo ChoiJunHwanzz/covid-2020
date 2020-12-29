@@ -52,13 +52,19 @@ function ResultScreen({navigation, route}) {
   });
 
   const wrongBlock = (word, idx) => {
+    console.log(idx);
     return (
       <View style={styles.reviewdatas}>
         <TouchableOpacity
           style={
             idx !== 0
               ? {...styles.moveBoxBtn, left: 10}
-              : {...styles.moveBoxBtn, left: 10, display: 'none'}
+              : {
+                  ...styles.moveBoxBtn,
+                  left: 10,
+                  display: 'none',
+                  position: 'relative', // for android
+                }
           }
           onPress={() => {
             wrongBox.snapToPrev();
@@ -76,9 +82,14 @@ function ResultScreen({navigation, route}) {
         </View>
         <TouchableOpacity
           style={
-            idx !== wrong.length - 1
+            idx !== wrong.length - 1 && wrong.length !== 0
               ? {...styles.moveBoxBtn, right: 10}
-              : {...styles.moveBoxBtn, right: 10, display: 'none'}
+              : {
+                  ...styles.moveBoxBtn,
+                  right: 10,
+                  display: 'none',
+                  position: 'relative', // for android
+                }
           }
           onPress={() => {
             wrongBox.snapToNext();
@@ -99,7 +110,12 @@ function ResultScreen({navigation, route}) {
           style={
             idx !== 0
               ? {...styles.moveBoxBtn, left: 10}
-              : {...styles.moveBoxBtn, left: 10, display: 'none'}
+              : {
+                  ...styles.moveBoxBtn,
+                  left: 10,
+                  display: 'none',
+                  position: 'relative', // for android
+                }
           }
           onPress={() => {
             correctBox.snapToPrev();
@@ -112,9 +128,14 @@ function ResultScreen({navigation, route}) {
         </View>
         <TouchableOpacity
           style={
-            idx !== correct.length - 1
+            idx !== correct.length - 1 && correct.length !== 0
               ? {...styles.moveBoxBtn, right: 10}
-              : {...styles.moveBoxBtn, right: 10, display: 'none'}
+              : {
+                  ...styles.moveBoxBtn,
+                  right: 10,
+                  display: 'none',
+                  position: 'relative', // for android
+                }
           }
           onPress={() => {
             correctBox.snapToNext();

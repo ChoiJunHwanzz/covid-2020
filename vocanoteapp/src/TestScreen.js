@@ -66,7 +66,12 @@ function TestScreen({navigation, route}) {
           <TouchableOpacity
             style={
               idx == 0
-                ? {...styles.moveBoxBtn, left: 10, display: 'none'}
+                ? {
+                    ...styles.moveBoxBtn,
+                    left: 10,
+                    display: 'none',
+                    position: 'relative', // for android
+                  }
                 : {...styles.moveBoxBtn, left: 10}
             }
             onPress={() => {
@@ -94,7 +99,12 @@ function TestScreen({navigation, route}) {
             style={
               idx !== Object.values(datas).length - 1
                 ? {...styles.moveBoxBtn, right: 10}
-                : {...styles.moveBoxBtn, right: 10, display: 'none'}
+                : {
+                    ...styles.moveBoxBtn,
+                    right: 10,
+                    display: 'none',
+                    position: 'relative', // for android
+                  }
             }
             onPress={() => {
               _onMovePage(word);
