@@ -18,6 +18,7 @@
 		2DCD954D1E0B4F2C00145EB5 /* vocanoteappTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* vocanoteappTests.m */; };
 		51328E38DECD800E065426DD /* libPods-vocanoteapp-vocanoteappTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F8EC113541B104E710CB4E27 /* libPods-vocanoteapp-vocanoteappTests.a */; };
 		61D50B66E4FB637C062C71F3 /* libPods-vocanoteapp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 25B6807FC5939E37C1F7AF63 /* libPods-vocanoteapp.a */; };
+		690E8B4C259CDAAD00CB4205 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 690E8B4B259CDAAD00CB4205 /* SplashScreen.storyboard */; };
 		697B1D622552A1FD0029247F /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = 697B1D612552A1FD0029247F /* Fonts */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		B420B68AC7FC15D86ECC81C5 /* libPods-vocanoteapp-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 805F7DEF261C72E648674DCC /* libPods-vocanoteapp-tvOSTests.a */; };
@@ -57,6 +58,7 @@
 		2D02E4901E0B4A5D006451C7 /* vocanoteapp-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "vocanoteapp-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3519885FD6E200236E250754 /* Pods-vocanoteapp-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-vocanoteapp-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-vocanoteapp-tvOSTests/Pods-vocanoteapp-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		4058F8085E429DC6DBDDB9D5 /* Pods-vocanoteapp-vocanoteappTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-vocanoteapp-vocanoteappTests.debug.xcconfig"; path = "Target Support Files/Pods-vocanoteapp-vocanoteappTests/Pods-vocanoteapp-vocanoteappTests.debug.xcconfig"; sourceTree = "<group>"; };
+		690E8B4B259CDAAD00CB4205 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SplashScreen.storyboard; sourceTree = "<group>"; };
 		697B1D612552A1FD0029247F /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Fonts; sourceTree = "<group>"; };
 		6D4632D2E1E4AACDF69BFA55 /* Pods-vocanoteapp-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-vocanoteapp-tvOS.release.xcconfig"; path = "Target Support Files/Pods-vocanoteapp-tvOS/Pods-vocanoteapp-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		703E834DE9DC9601B3A26657 /* Pods-vocanoteapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-vocanoteapp.debug.xcconfig"; path = "Target Support Files/Pods-vocanoteapp/Pods-vocanoteapp.debug.xcconfig"; sourceTree = "<group>"; };
@@ -161,6 +163,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				690E8B4B259CDAAD00CB4205 /* SplashScreen.storyboard */,
 				697B1D612552A1FD0029247F /* Fonts */,
 				13B07FAE1A68108700A75B9A /* vocanoteapp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -344,6 +347,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				697B1D622552A1FD0029247F /* Fonts in Resources */,
+				690E8B4C259CDAAD00CB4205 /* SplashScreen.storyboard in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 			);

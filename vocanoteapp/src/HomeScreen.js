@@ -17,6 +17,7 @@ import {Picker} from '@react-native-picker/picker';
 import {WheelPicker} from 'react-native-wheel-picker-android';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import v4 from 'uuid/v4';
+import SplashScreen from 'react-native-splash-screen';
 import LanBox from './mainlanbox';
 import lanjson from './defaultvalues/lansjson';
 import lans from './defaultvalues/lans';
@@ -58,6 +59,7 @@ export default class HomeScreen extends Component {
     this._getAddableDatas();
     this._getLanBoxDatas();
     this._getColors();
+    SplashScreen.hide();
   };
 
   componentWillUnmount = () => {
