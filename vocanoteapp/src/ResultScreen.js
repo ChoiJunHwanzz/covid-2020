@@ -52,7 +52,6 @@ function ResultScreen({navigation, route}) {
   });
 
   const wrongBlock = (word, idx) => {
-    console.log(idx);
     return (
       <View style={styles.reviewdatas}>
         <TouchableOpacity
@@ -209,7 +208,6 @@ function ResultScreen({navigation, route}) {
       {correct.length > 0 && (
         <TouchableOpacity
           onPress={async () => {
-            console.log('제거하기', correct);
             const datas = await AsyncStorage.getItem(info.code + '');
             let parsed = JSON.parse(datas);
             correct.forEach((item) => {

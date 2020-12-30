@@ -28,7 +28,6 @@ export default class Showdatas extends Component {
     name: this.props.route.params.item.name, // lan name
     code: this.props.route.params.item.code, // lan code
     color: this.props.route.params.item.bcolors.backgroundColor, // lan color
-    clicked: false, // to go back
     modalvisible: false, // to show modal
     vocadatas: {}, // save voca datas
     togtr: false, // to toggle translate automatically
@@ -70,6 +69,9 @@ export default class Showdatas extends Component {
         .then((res) => res.json())
         .then((json) => {
           return json.translated_text[0][0].split('.')[0];
+        })
+        .catch(() => {
+          Alert.alert('번역 실패', '다시 시도하거나 직접 입력해주세요');
         });
     } else {
       return fetch(
@@ -79,6 +81,9 @@ export default class Showdatas extends Component {
         .then((res) => res.json())
         .then((json) => {
           return json.translated_text[0][0].split('.')[0];
+        })
+        .catch(() => {
+          Alert.alert('번역 실패', '다시 시도하거나 직접 입력해주세요');
         });
     }
   };
