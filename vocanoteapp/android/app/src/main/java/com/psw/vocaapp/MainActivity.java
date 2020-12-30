@@ -1,4 +1,4 @@
-package com.vocanoteapp;
+package com.psw.vocaapp;
 
 import android.os.Bundle;
 import org.devio.rn.splashscreen.SplashScreen;
