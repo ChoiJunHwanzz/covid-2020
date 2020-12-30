@@ -61,7 +61,7 @@ export default class HomeScreen extends Component {
   };
 
   componentWillUnmount = () => {
-    BackHandler.removeEventListener('hardwareBackPress');
+    BackHandler.removeEventListener('hardwareBackPress', this.backAction);
   };
 
   _getAddableDatas = async () => {
@@ -260,7 +260,6 @@ export default class HomeScreen extends Component {
 
   _gotoTestScreen = () => {
     const {lanboxrefs, goTest, enablebtn} = this.state;
-    // this.props.navigation.navigate('Testscreen');
     Object.values(lanboxrefs).map((lanbox) => {
       lanbox.forceUpdate(() => {
         lanbox.setState({

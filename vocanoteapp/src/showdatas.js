@@ -401,13 +401,13 @@ export default class Showdatas extends Component {
                       toglan: !this.state.toglan,
                     });
                   }}>
-                  <Text>{name} </Text>
+                  <Text style={{fontFamily: 'Bazzi'}}>{name} </Text>
                   {this.state.toglan ? (
                     <IonIcon name="arrow-back-outline" />
                   ) : (
                     <IonIcon name="arrow-forward-outline" />
                   )}
-                  <Text> 한국어</Text>
+                  <Text style={{fontFamily: 'Bazzi'}}> 한국어</Text>
                 </TouchableOpacity>
               )}
               <TextInput
@@ -644,6 +644,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     padding: 0,
     marginBottom: 10,
+    fontFamily: 'Bazzi',
   },
   openButton: {
     borderRadius: 20,
@@ -664,7 +665,7 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: 'white',
-    fontWeight: 'bold',
+    fontFamily: 'Bazzi',
     textAlign: 'center',
   },
 });

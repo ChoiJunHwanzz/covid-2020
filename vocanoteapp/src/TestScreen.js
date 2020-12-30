@@ -1,16 +1,13 @@
-import React, {useState, useRef, useCallback} from 'react';
-import {useEffect} from 'react';
+import React, {useState, useRef} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  ScrollView,
   View,
   Text,
   Dimensions,
   TouchableWithoutFeedback,
   TouchableOpacity,
   Platform,
-  Modal,
   TextInput,
   Keyboard,
   Alert,

@@ -1,20 +1,14 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {useState, useRef, useCallback} from 'react';
+import React, {useRef} from 'react';
 import {useEffect} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  ScrollView,
   View,
   Text,
   Dimensions,
-  TouchableWithoutFeedback,
   TouchableOpacity,
   Platform,
-  Modal,
-  TextInput,
-  Keyboard,
-  Alert,
   BackHandler,
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';

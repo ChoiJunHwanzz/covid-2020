@@ -1,14 +1,9 @@
 import 'react-native-gesture-handler';
 import React from 'react';
-import {Platform} from 'react-native';
-import {
-  NavigationContainer,
-  StackViewTransitionConfigs,
-} from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
 import {
   CardStyleInterpolators,
   createStackNavigator,
-  HeaderBackButton,
 } from '@react-navigation/stack';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import HomeScreen from './src/HomeScreen';

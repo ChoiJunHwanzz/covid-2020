@@ -1,12 +1,9 @@
 import React, {Component} from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
-  ScrollView,
   View,
   Text,
   Dimensions,
-  TouchableWithoutFeedback,
   TouchableOpacity,
   Platform,
 } from 'react-native';
@@ -16,9 +13,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const pwidth = Dimensions.get('window').width;
 
 export default class LanBox extends Component {
-  state = {
-    isdeleting: false,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      isdeleting: false,
+      goTestPage: false,
+    };
+  }
+
   deletebox = async (item) => {
     // delete words
     await AsyncStorage.removeItem(item.code + '');
