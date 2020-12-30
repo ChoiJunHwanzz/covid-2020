@@ -308,7 +308,7 @@ export default class Showdatas extends Component {
                         {item.item.word}
                       </Text>
                     </View>
-                    <View style={styles.wordsbox}>
+                    <View style={{...styles.wordsbox, marginLeft: 10}}>
                       <Text
                         style={
                           item.item.Done
@@ -560,6 +560,8 @@ const styles = StyleSheet.create({
   wordsbox: {
     flex: 1,
     alignItems: 'center',
+    justifyContent: 'center',
+    height: 80,
   },
   // add word
   addbtn: {
