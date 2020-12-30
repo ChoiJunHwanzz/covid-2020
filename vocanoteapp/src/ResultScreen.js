@@ -292,8 +292,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   wordtxt: {
-    fontSize: 25,
-    fontFamily: 'Itim-Regular',
+    fontSize: 30,
+    fontFamily: 'Bazzi',
   },
   translatetxt: {
     height: 40,
@@ -332,8 +332,8 @@ const styles = StyleSheet.create({
 
   resultWord: {
     color: '#818181',
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 22,
+    fontFamily: 'Bazzi',
   },
 
   exceptview: {
@@ -345,8 +345,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   excepttxt: {
-    fontSize: 23,
-    fontWeight: 'bold',
+    fontSize: 25,
     color: '#f1f1f1',
+    fontFamily: 'Bazzi',
   },
 });

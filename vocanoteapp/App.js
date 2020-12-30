@@ -42,14 +42,14 @@ export default function App() {
                 name={'arrow-back-ios'}
                 {...props}
                 size={30}
-                style={{color: '#f1f1f1'}}
+                style={{color: '#f1f1f1', marginLeft: 15}}
               />
             ),
             title: route.params.info.name + ' Test',
             headerTintColor: '#f1f1f1',
             headerTitleStyle: {
-              fontWeight: 'bold',
               fontSize: 30,
+              fontFamily: 'Bazzi',
             },
             headerStyle: {
               backgroundColor: '#76C1E2',
@@ -85,7 +85,7 @@ export default function App() {
                 name={'arrow-back-ios'}
                 {...props}
                 size={30}
-                style={{color: '#f1f1f1'}}
+                style={{color: '#f1f1f1', marginLeft: 15}}
                 onPress={() => navigation.pop()}
               />
             ),
@@ -98,7 +98,7 @@ export default function App() {
             title: 'Result',
             headerTintColor: '#f1f1f1',
             headerTitleStyle: {
-              fontWeight: 'bold',
+              fontFamily: 'Bazzi',
               fontSize: 30,
             },
             headerTitleAlign: 'center',

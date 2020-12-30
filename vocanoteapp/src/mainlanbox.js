@@ -118,9 +118,9 @@ const styles = StyleSheet.create({
     }),
   },
   btnname: {
-    fontSize: 30,
-    fontWeight: 'bold',
+    fontSize: 35,
     color: '#f1f1f1',
+    fontFamily: 'Bazzi',
   },
   deletebtn: {
     width: 30,

@@ -294,30 +294,34 @@ export default class Showdatas extends Component {
                       }></EntypoIcon>
                   </TouchableOpacity>
                   <View style={styles.words}>
-                    <Text
-                      style={
-                        item.item.Done
-                          ? {
-                              ...styles.word,
-                              color: '#dfdfdf',
-                              textDecorationLine: 'line-through',
-                            }
-                          : styles.word
-                      }>
-                      {item.item.word}
-                    </Text>
-                    <Text
-                      style={
-                        item.item.Done
-                          ? {
-                              ...styles.translated,
-                              color: '#dfdfdf',
-                              textDecorationLine: 'line-through',
-                            }
-                          : styles.translated
-                      }>
-                      {item.item.translated}
-                    </Text>
+                    <View style={styles.wordsbox}>
+                      <Text
+                        style={
+                          item.item.Done
+                            ? {
+                                ...styles.word,
+                                color: '#dfdfdf',
+                                textDecorationLine: 'line-through',
+                              }
+                            : styles.word
+                        }>
+                        {item.item.word}
+                      </Text>
+                    </View>
+                    <View style={styles.wordsbox}>
+                      <Text
+                        style={
+                          item.item.Done
+                            ? {
+                                ...styles.translated,
+                                color: '#dfdfdf',
+                                textDecorationLine: 'line-through',
+                              }
+                            : styles.translated
+                        }>
+                        {item.item.translated}
+                      </Text>
+                    </View>
                   </View>
                 </View>
               </View>
@@ -351,6 +355,7 @@ export default class Showdatas extends Component {
           closeOnRowPress={true}
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}
+          style={Platform.OS === 'ios' && {marginBottom: 20}}
         />
 
         {/* modal start */}
@@ -489,10 +494,9 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   lanname: {
-    fontFamily: 'Itim-Regular',
+    fontFamily: 'Bazzi',
     color: 'rgba(255,255,255,1)',
     fontSize: 45,
-    fontWeight: 'bold',
   },
 
   // data lists
@@ -529,14 +533,14 @@ const styles = StyleSheet.create({
   word: {
     left: 10,
     color: '#121212',
-    fontSize: 20,
-    fontFamily: 'Itim-Regular',
+    fontSize: 22,
+    fontFamily: 'Bazzi',
   },
   translated: {
     right: 10,
     color: '#121212',
-    fontSize: 20,
-    fontFamily: 'Itim-Regular',
+    fontSize: 22,
+    fontFamily: 'Bazzi',
   },
   rightswipebtn: {
     height: 80,
@@ -553,7 +557,10 @@ const styles = StyleSheet.create({
     color: '#f1f1f1',
     fontWeight: '800',
   },
-
+  wordsbox: {
+    flex: 1,
+    alignItems: 'center',
+  },
   // add word
   addbtn: {
     alignItems: 'center',

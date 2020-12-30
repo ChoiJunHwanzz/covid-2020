@@ -268,6 +268,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     color: '#515151',
     borderRadius: 8,
+    fontFamily: 'Bazzi',
   },
 
   submitbtn: {

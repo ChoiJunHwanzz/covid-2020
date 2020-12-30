@@ -342,8 +342,8 @@ export default class HomeScreen extends Component {
                 <Text
                   style={{
                     fontSize: 30,
-                    fontWeight: 'bold',
                     color: '#f1f1f1',
+                    fontFamily: 'Bazzi',
                   }}>
                   시험 보기
                 </Text>
