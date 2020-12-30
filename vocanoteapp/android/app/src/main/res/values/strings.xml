@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">vocanoteapp</string>
+    <string name="app_name">Voca App</string>
     <string name="splashscreen">Splashscreen</string>
-    <string name="todo">TODO</string>
 </resources>
