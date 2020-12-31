@@ -24,14 +24,16 @@ function TestScreen({navigation, route}) {
   const [results, setResults] = useState({});
 
   let wordBox = useRef();
-  let iText = useRef();
 
   const _onChangetxt = (txt, word) => {
-    setInput({
+    const newinput = {
       ...word,
       result: txt,
-      correct: txt.replace(' ', '') == word.translated.replace(' ', ''),
-    });
+      correct:
+        txt.replace(' ', '').toLowerCase() ==
+        word.translated.replace(' ', '').toLowerCase(),
+    };
+    setInput(newinput);
   };
 
   const _onMovePage = (word) => {
@@ -80,7 +82,6 @@ function TestScreen({navigation, route}) {
           <View style={styles.textBox}>
             <Text style={styles.wordtxt}>{word.word}</Text>
             <TextInput
-              ref={(ref) => (iText = ref)}
               style={styles.translatetxt}
               placeholder={'해석 입력'}
               placeholderTextColor={'#aeaeae'}
@@ -255,7 +256,7 @@ const styles = StyleSheet.create({
   },
   wordtxt: {
     fontSize: 25,
-    fontFamily: 'Itim-Regular',
+    fontFamily: 'Bazzi',
   },
   translatetxt: {
     height: 40,

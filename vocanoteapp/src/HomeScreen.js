@@ -59,7 +59,9 @@ export default class HomeScreen extends Component {
     this._getAddableDatas();
     this._getLanBoxDatas();
     this._getColors();
-    SplashScreen.hide();
+    setTimeout(() => {
+      SplashScreen.hide();
+    }, 2000);
   };
 
   componentWillUnmount = () => {
@@ -167,7 +169,7 @@ export default class HomeScreen extends Component {
           async () => {
             const beforeparse = await AsyncStorage.getItem(item.code + '');
             const parsed = JSON.parse(beforeparse);
-            if (parsed == null) {
+            if (parsed == null || Object.values(parsed).length === 0) {
               alert('단어가 존재하지 않습니다\n먼저 단어를 추가해주세요');
             } else {
               this.props.navigation.push('Testscreen', {

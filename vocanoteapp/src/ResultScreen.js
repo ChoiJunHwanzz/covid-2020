@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
   // datas
   reviewdatas: {
     width: pwidth - 50,
-    height: 200,
+    height: 180,
     marginTop: 10,
     borderRadius: 20,
     borderWidth: 1,
@@ -274,14 +274,13 @@ const styles = StyleSheet.create({
   },
 
   databoxes: {
-    height: 230,
+    height: 200,
     justifyContent: 'center',
   },
 
   textBox: {
     width: pwidth - 190,
     height: 160,
-
     alignItems: 'center',
     justifyContent: 'space-around',
   },
