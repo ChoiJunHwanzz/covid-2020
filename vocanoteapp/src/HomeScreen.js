@@ -103,8 +103,13 @@ export default class HomeScreen extends Component {
         isloaded: true,
       });
     } else {
+      const filterdata = parsed.filter((data) => {
+        return data.id !== 'add';
+      });
+      const final = JSON.stringify(filterdata);
+      await AsyncStorage.setItem('vocaDatas', final);
       this.setState({
-        datas: parsed,
+        datas: filterdata,
         isloaded: true,
       });
     }
@@ -115,8 +120,18 @@ export default class HomeScreen extends Component {
     const colors = await AsyncStorage.getItem('colorSelection');
     const parsedcolors = JSON.parse(colors);
     if (parsedcolors != null) {
+      let filterdata = [];
+      parsedcolors.map((color) => {
+        if (color.color !== '#ff7f7f') {
+          filterdata.push(color);
+        } else {
+          filterdata.push({color: '#37B092'});
+        }
+      });
+      const final = JSON.stringify(filterdata);
+      await AsyncStorage.setItem('colorSelection', final);
       this.setState({
-        colorselection: parsedcolors,
+        colorselection: filterdata,
       });
     } else {
       const color = JSON.stringify(colorselect);
@@ -153,41 +168,35 @@ export default class HomeScreen extends Component {
   _clickLanBox = (item) => {
     const {goTest, lanboxrefs, enablebtn} = this.state;
     if (goTest) {
-      if (item.id != 'add') {
-        Object.values(lanboxrefs).map((lanbox) => {
-          lanbox.forceUpdate(() => {
-            lanbox.setState({
-              goTestPage: false,
-            });
+      Object.values(lanboxrefs).map((lanbox) => {
+        lanbox.forceUpdate(() => {
+          lanbox.setState({
+            goTestPage: false,
           });
         });
-        this.setState(
-          {
-            goTest: false,
-            enablebtn: !enablebtn,
-          },
-          async () => {
-            const beforeparse = await AsyncStorage.getItem(item.code + '');
-            const parsed = JSON.parse(beforeparse);
-            if (parsed == null || Object.values(parsed).length === 0) {
-              alert('단어가 존재하지 않습니다\n먼저 단어를 추가해주세요');
-            } else {
-              this.props.navigation.push('Testscreen', {
-                info: item,
-                datas: parsed,
-              });
-            }
-          },
-        );
-      }
+      });
+      this.setState(
+        {
+          goTest: false,
+          enablebtn: !enablebtn,
+        },
+        async () => {
+          const beforeparse = await AsyncStorage.getItem(item.code + '');
+          const parsed = JSON.parse(beforeparse);
+          if (parsed == null || Object.values(parsed).length === 0) {
+            alert('단어가 존재하지 않습니다\n먼저 단어를 추가해주세요');
+          } else {
+            this.props.navigation.push('Testscreen', {
+              info: item,
+              datas: parsed,
+            });
+          }
+        },
+      );
     } else {
-      if (item.id != 'add') {
-        this.props.navigation.push('Datas', {
-          item: item,
-        });
-      } else {
-        this.RBSheet.open();
-      }
+      this.props.navigation.push('Datas', {
+        item: item,
+      });
     }
   };
 
@@ -211,7 +220,7 @@ export default class HomeScreen extends Component {
     landatasarr.forEach((lan) => {
       lannamearr.push(lan.name);
     });
-    datasarr.splice(-1, 0, newitem);
+    datasarr.push(newitem);
 
     const savedatas = JSON.stringify(datasarr);
     await AsyncStorage.setItem('vocaDatas', savedatas);
@@ -264,6 +273,7 @@ export default class HomeScreen extends Component {
 
   _gotoTestScreen = () => {
     const {lanboxrefs, goTest, enablebtn} = this.state;
+
     Object.values(lanboxrefs).map((lanbox) => {
       lanbox.forceUpdate(() => {
         lanbox.setState({
@@ -275,6 +285,10 @@ export default class HomeScreen extends Component {
       goTest: !goTest,
       enablebtn: !enablebtn,
     });
+  };
+
+  _addlanbox = () => {
+    this.RBSheet.open();
   };
 
   render() {
@@ -314,6 +328,12 @@ export default class HomeScreen extends Component {
               <MaterialIcons name={'delete-outline'} size={30} />
             )}
           </TouchableOpacity>
+          <TouchableOpacity
+            style={landatas.length !== 0 ? styles.addbtn : {display: 'none'}}
+            disabled={!enablebtn || deleting}
+            onPress={this._addlanbox}>
+            <MaterialIcons name={'add'} size={30} />
+          </TouchableOpacity>
         </SafeAreaView>
         <ScrollView style={styles.langs}>
           <View
@@ -326,13 +346,13 @@ export default class HomeScreen extends Component {
               <TouchableOpacity
                 onPress={() => this._clickLanBox(item)}
                 activeOpacity={Platform.OS == 'android' ? 0.9 : 0.5}
-                disabled={item.id == 'add' ? !enablebtn || deleting : deleting}
+                disabled={deleting}
                 key={item.id}>
                 <LanBox
                   item={item}
                   ref={(ref) => {
                     let refs = this.state.lanboxrefs;
-                    refs[item.id == 'add' ? item.id : item.code] = ref;
+                    refs[item.code] = ref;
                   }}
                 />
               </TouchableOpacity>
@@ -460,6 +480,15 @@ const styles = StyleSheet.create({
   nametxt: {
     fontSize: 50,
     fontFamily: 'Itim-Regular',
+  },
+  addbtn: {
+    width: 50,
+    height: 50,
+    position: 'absolute',
+    bottom: 120,
+    left: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   editbtn: {
     width: 50,

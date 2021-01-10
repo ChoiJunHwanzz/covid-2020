@@ -25,18 +25,18 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
   <key>NSAppTransportSecurity</key>
-  <dict>
-    <key>NSAllowsArbitraryLoads</key>
-    <true/>
-    <key>NSExceptionDomains</key>
     <dict>
-      <key>localhost</key>
+      <key>NSAllowsArbitraryLoads</key>
+      <true/>
+      <key>NSExceptionDomains</key>
       <dict>
-        <key>NSExceptionAllowsInsecureHTTPLoads</key>
-        <true/>
+        <key>localhost</key>
+        <dict>
+          <key>NSExceptionAllowsInsecureHTTPLoads</key>
+          <true/>
+        </dict>
       </dict>
     </dict>
-  </dict>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Fonts/Itim-Regular.ttf</string>

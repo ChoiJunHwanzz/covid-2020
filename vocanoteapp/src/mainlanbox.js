@@ -65,7 +65,7 @@ export default class LanBox extends Component {
   };
   render() {
     const {isdeleting, goTestPage} = this.state;
-    return this.props.item.id != 'add' ? (
+    return (
       <View style={[styles.lanbox, this.props.item.bcolors]}>
         {isdeleting && (
           <TouchableOpacity
@@ -85,11 +85,6 @@ export default class LanBox extends Component {
             ? this.props.item.name + '\n테스트'
             : this.props.item.name}
         </Text>
-      </View>
-    ) : (
-      // add는 따로 구현
-      <View style={[styles.lanbox, this.props.item.bcolors]}>
-        <Text style={styles.btnname}>{this.props.item.name}</Text>
       </View>
     );
   }

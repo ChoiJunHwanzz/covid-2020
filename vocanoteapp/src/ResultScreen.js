@@ -216,6 +216,14 @@ function ResultScreen({navigation, route}) {
           </View>
         </TouchableOpacity>
       )}
+      <TouchableOpacity
+        onPress={async () => {
+          navigation.popToTop();
+        }}>
+        <View style={styles.backview}>
+          <Text style={styles.excepttxt}>돌아가기</Text>
+        </View>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -341,5 +349,15 @@ const styles = StyleSheet.create({
     fontSize: 25,
     color: '#f1f1f1',
     fontFamily: 'Bazzi',
+  },
+
+  backview: {
+    width: pwidth - 50,
+    height: 60,
+    borderRadius: 15,
+    backgroundColor: '#76C1E2',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 10,
   },
 });

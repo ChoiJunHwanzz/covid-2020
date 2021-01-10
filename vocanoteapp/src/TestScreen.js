@@ -30,8 +30,8 @@ function TestScreen({navigation, route}) {
       ...word,
       result: txt,
       correct:
-        txt.replace(' ', '').toLowerCase() ==
-        word.translated.replace(' ', '').toLowerCase(),
+        txt.replace(/ /gi, '').toLowerCase() ==
+        word.translated.replace(/ /gi, '').toLowerCase(),
     };
     setInput(newinput);
   };

@@ -16,6 +16,8 @@ import IonIcon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import v4 from 'uuid/v4';
+import Tts from 'react-native-tts';
+import Toast, {DURATION} from 'react-native-easy-toast';
 
 const pwidth = Dimensions.get('window').width;
 const pheight = Dimensions.get('window').height;
@@ -32,9 +34,19 @@ export default class Showdatas extends Component {
     vocadatas: {}, // save voca datas
     togtr: false, // to toggle translate automatically
     toglan: false, // to toggle target language
+    defaulttr: true,
+    isspeaking: false,
   };
   componentDidMount = () => {
     this._getDatas();
+    Tts.addEventListener('tts-start', () => this._ttsEvents('s'));
+    Tts.addEventListener('tts-finish', () => this._ttsEvents('f'));
+    Tts.addEventListener('tts-cancel', () => this._ttsEvents('c'));
+  };
+  componentWillUnmount = () => {
+    Tts.removeAllListeners('tts-start');
+    Tts.removeAllListeners('tts-finish');
+    Tts.removeAllListeners('tts-cancel');
   };
 
   _getDatas = async () => {
@@ -116,7 +128,7 @@ export default class Showdatas extends Component {
 
   // translated data 저장 후 close
   _modaltrsaveclose = async () => {
-    const {vocadatas, txt} = this.state;
+    const {vocadatas, txt, toglan} = this.state;
     if (txt === '') {
       alert('단어를 입력해주세요');
     } else {
@@ -132,6 +144,7 @@ export default class Showdatas extends Component {
             word: txt,
             translated: res,
             Done: false,
+            defaulttr: toglan ? false : true,
           };
           item[id] = newdata;
           this.setState((prev) => {
@@ -151,6 +164,7 @@ export default class Showdatas extends Component {
             toglan: false,
             txt: '',
             sectxt: '',
+            defaulttr: true,
           });
         }
       });
@@ -159,7 +173,7 @@ export default class Showdatas extends Component {
 
   // user input data save & close
   _modalsaveclose = async () => {
-    const {vocadatas, txt, sectxt} = this.state;
+    const {vocadatas, txt, sectxt, toglan} = this.state;
 
     if (txt === '') {
       alert('단어를 입력해주세요!');
@@ -174,6 +188,7 @@ export default class Showdatas extends Component {
           word: txt,
           translated: sectxt,
           Done: false,
+          defaulttr: !toglan,
         };
         item[id] = newdata;
         this.setState((prev) => {
@@ -200,25 +215,34 @@ export default class Showdatas extends Component {
 
   // dataitems.js
   _rightswipebtn = (id) => {
-    try {
-      this.setState(
-        (prev) => {
-          const item = prev.vocadatas;
-          delete item[id];
-          const newstate = {
-            ...prev,
-            ...item,
-          };
-          return {...newstate};
-        },
-        () => {
-          this._saveToAsyncStorage();
-        },
-      );
-    } catch {}
+    this.setState(
+      (prev) => {
+        const item = prev.vocadatas;
+        delete item[id];
+        const newstate = {
+          ...prev,
+          ...item,
+        };
+        return {...newstate};
+      },
+      () => {
+        this._saveToAsyncStorage();
+      },
+    );
   };
 
-  _toggleDone = (item) => {
+  _leftswipebtn = (item) => {
+    this.setState(
+      {
+        isspeaking: true,
+      },
+      () => {
+        this._ttsStart(item);
+      },
+    );
+  };
+
+  _toggleDone = async (item) => {
     this.setState(
       (prev) => {
         let newvoca = {}; // toggle해서 저장한 데이터 포함 단어들 데이터 새로 담을 변수
@@ -250,8 +274,209 @@ export default class Showdatas extends Component {
     );
   };
 
+  _readTextinit = async (code, word) => {
+    switch (code) {
+      case 'en': // english
+        await this._readText(
+          word,
+          'com.apple.ttsbundle.siri_female_en-US_compact',
+          'en-US-language',
+          'en-US',
+        );
+        break;
+      case 'cn': // chinese
+        await this._readText(
+          word,
+          'com.apple.ttsbundle.Ting-Ting-compact',
+          'cmn-cn-x-ccc-local',
+          'zh-CN',
+        );
+        break;
+      case 'jp': // japanese
+        await this._readText(
+          word,
+          'com.apple.ttsbundle.Kyoko-compact',
+          'ja-JP-language',
+          'ja-JP',
+        );
+        break;
+      case 'fr': // french
+        await this._readText(
+          word,
+          'com.apple.ttsbundle.siri_female_fr-FR_compact',
+          'fr-FR-language',
+          'fr-FR',
+        );
+        break;
+      case 'es': // spanish
+        await this._readText(
+          word,
+          'com.apple.ttsbundle.Monica-compact',
+          'es-ES-language',
+          'es-ES',
+        );
+        break;
+      case 'de': // German
+        await this._readText(
+          word,
+          'com.apple.ttsbundle.siri_female_de-DE_compact',
+          'de-DE-language',
+          'de-DE',
+        );
+        break;
+      case 'it': // italian
+        await this._readText(
+          word,
+          'com.apple.ttsbundle.Alice-compact',
+          'it-IT-language',
+          'it-IT',
+        );
+        break;
+      case 'ru': // russian
+        await this._readText(
+          word,
+          'com.apple.ttsbundle.Milena-compact',
+          'ru-RU-language',
+          'ru-RU',
+        );
+        break;
+      case 'th': // thai
+        await this._readText(
+          word,
+          'com.apple.ttsbundle.Kanya-compact',
+          'th-TH-language',
+          'th-TH',
+        );
+        break;
+      case 'vi': // vietnam
+        if (Platform.OS === 'ios') {
+          alert('베트남어는 미지원 서비스입니다.');
+          this.swipelist.closeAllOpenRows();
+        } else {
+          await this._readText(word, '', 'vi-VN-language', 'vi-VN');
+        }
+        break;
+      case 'kr': // korean
+        await this._readText(word, 'com.apple.ttsbundle.Yuna-premium');
+        break;
+    }
+  };
+
+  _readText = async (word, iosvoiceid, androidvoice, defaultlan) => {
+    Tts.getInitStatus().then(async () => {
+      Tts.setDucking(true);
+      Tts.stop();
+      if (Platform.OS === 'ios') {
+        await Tts.setDefaultLanguage(defaultlan);
+        await Tts.speak(word, {
+          iosVoiceId: iosvoiceid, // ios voice
+          rate: 0.5,
+        });
+      } else {
+        // Android
+        await Tts.setDefaultEngine('com.google.android.tts');
+        await Tts.setDefaultLanguage(defaultlan);
+        await Tts.setDefaultVoice(androidvoice); // android voice
+        await Tts.speak(word, {
+          androidParams: {
+            KEY_PARAM_PAN: -1,
+            KEY_PARAM_VOLUME: 1,
+            KEY_PARAM_STREAM: 'STREAM_MUSIC',
+          },
+        });
+      }
+    });
+  };
+
+  _ttsLanDetect = async (txt) => {
+    const detection = await this._languageDetection(txt);
+    if (detection.code !== 'err') {
+      const returnval = {
+        code: detection.language_info[0].code,
+        word: txt,
+      };
+      return returnval;
+    } else {
+      return detection;
+    }
+  };
+
+  _languageDetection = async (txt) => {
+    const option = {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: `KakaoAK ${API_KEY}`,
+      },
+    };
+    return await fetch(
+      `https://dapi.kakao.com//v3/translation/language/detect?query=${txt}`,
+      option,
+    )
+      .then((res) => res.json())
+      .then((json) => {
+        return json;
+      })
+      .catch(() => {
+        const errreturn = {
+          code: 'err',
+          word: 'err',
+        };
+        return errreturn;
+      });
+  };
+
+  _ttsStart = async (item) => {
+    const detect = await this._ttsLanDetect(item.word);
+    if (detect.code !== 'err') {
+      if (detect.code === 'kr') {
+        // 업데이트 이전에 저장한 단어들을 위해 탐지하여 tts 실행함
+        // 단어를 탐지한 결과가 한국어이면 발음을 들을 필요가 없으니 번역된 결과 텍스트를 다시 탐지
+        const secdetect = await this._ttsLanDetect(item.translated);
+        this._readTextinit(this.state.code, secdetect.word);
+      } else {
+        this._readTextinit(this.state.code, detect.word);
+      }
+    } else {
+      if (item.defaulttr === true)
+        this._readTextinit(this.state.code, item.word);
+      else if (item.defaulttr === false)
+        this._readTextinit(this.state.code, item.translated);
+      else
+        Alert.alert(
+          '네트워크, 버전 오류',
+          '네트워크 연결 상태를 확인하거나\n단어를 다시 저장 후 시도해주세요',
+        );
+    }
+  };
+
+  _ttsEvents = (status) => {
+    const {name} = this.state;
+    switch (status) {
+      case 's':
+        this.toast.show(name + ' TTS');
+        break;
+      case 'c':
+        this.toast.close();
+        break;
+      case 'f':
+        this.setState(
+          {
+            isspeaking: false,
+          },
+          () => {
+            this.swipelist.closeAllOpenRows();
+          },
+        );
+        break;
+      default:
+        break;
+    }
+  };
+
   render() {
-    const {modalvisible, name, vocadatas, color} = this.state;
+    const {modalvisible, name, vocadatas, color, isspeaking} = this.state;
     return (
       <View style={styles.container} ref={(ref) => (this.parent = ref)}>
         <SafeAreaView
@@ -339,6 +564,19 @@ export default class Showdatas extends Component {
                 }}>
                 <TouchableOpacity
                   style={{
+                    ...styles.leftswipebtn,
+                    backgroundColor: color + 'cc',
+                  }}
+                  onPress={() => {
+                    this._leftswipebtn(rowData.item);
+                  }}>
+                  <IonIcon
+                    name={isspeaking ? 'mic-circle-outline' : 'mic-outline'}
+                    style={{...styles.swipetxt, fontSize: 30}}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
                     ...styles.rightswipebtn,
                     backgroundColor: color + 'cc',
                   }}
@@ -350,11 +588,14 @@ export default class Showdatas extends Component {
               </View>
             );
           }}
-          disableRightSwipe
           rightOpenValue={-100}
+          leftOpenValue={100}
+          stopLeftSwipe={130}
+          stopRightSwipe={-130}
           closeOnRowPress={true}
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}
+          ref={(ref) => (this.swipelist = ref)}
           style={Platform.OS === 'ios' && {marginBottom: 20}}
         />
 
@@ -393,23 +634,23 @@ export default class Showdatas extends Component {
                 </TouchableOpacity>
               </View>
 
-              {this.state.togtr && (
-                <TouchableOpacity
-                  style={styles.toglanguage}
-                  onPress={() => {
-                    this.setState({
-                      toglan: !this.state.toglan,
-                    });
-                  }}>
-                  <Text style={{fontFamily: 'Bazzi'}}>{name} </Text>
-                  {this.state.toglan ? (
-                    <IonIcon name="arrow-back-outline" />
-                  ) : (
-                    <IonIcon name="arrow-forward-outline" />
-                  )}
-                  <Text style={{fontFamily: 'Bazzi'}}> 한국어</Text>
-                </TouchableOpacity>
-              )}
+              {/* tog lan */}
+              <TouchableOpacity
+                style={styles.toglanguage}
+                onPress={() => {
+                  this.setState({
+                    toglan: !this.state.toglan,
+                  });
+                }}>
+                <Text style={{fontFamily: 'Bazzi'}}>{name} </Text>
+                {this.state.toglan ? (
+                  <IonIcon name="arrow-back-outline" />
+                ) : (
+                  <IonIcon name="arrow-forward-outline" />
+                )}
+                <Text style={{fontFamily: 'Bazzi'}}> 한국어</Text>
+              </TouchableOpacity>
+
               <TextInput
                 ref={(ref) => (this.txtref = ref)}
                 style={styles.modaltxtinput}
@@ -450,6 +691,25 @@ export default class Showdatas extends Component {
             </View>
           </View>
         </Modal>
+
+        <Toast
+          ref={(ref) => (this.toast = ref)}
+          style={{
+            width: 300,
+            height: 50,
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: 20,
+            backgroundColor: color + '00',
+          }}
+          textStyle={{
+            fontSize: 25,
+            fontFamily: 'Bazzi',
+            color: '#f1f1f1',
+          }}
+          position={'top'}
+          positionValue={110}
+        />
       </View>
     );
   }
@@ -506,6 +766,7 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     flexDirection: 'row',
     padding: 5,
+    marginHorizontal: pwidth * 0.1,
   },
   datadetails: {
     height: 70,
@@ -547,6 +808,16 @@ const styles = StyleSheet.create({
     width: 97,
     backgroundColor: 'red',
     right: 0,
+    position: 'absolute',
+    borderRadius: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  leftswipebtn: {
+    height: 80,
+    width: 97,
+    backgroundColor: 'red',
+    left: 0,
     position: 'absolute',
     borderRadius: 18,
     justifyContent: 'center',

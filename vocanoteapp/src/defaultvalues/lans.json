@@ -1,21 +1,26 @@
 [
-    {
-      "name": "영어",
-      "code": "en",
-      "id": "defaulten",
-      "bcolors": {"backgroundColor": "#CC97F3"}
-    },
-    {
-      "name": "중국어",
-      "code": "cn",
-      "id": "defaultzh",
-      "bcolors": {"backgroundColor": "#FDE27F"}
-    },
-    {
-      "name": "일본어",
-      "code": "jp",
-      "id": "defaultja",
-      "bcolors": {"backgroundColor": "#7EA3ED"}
-    },
-    {"name": "추가", "id": "add", "bcolors": {"backgroundColor": "#37B092"}}
-  ]
+  {
+    "name": "영어",
+    "code": "en",
+    "id": "defaulten",
+    "bcolors": {
+      "backgroundColor": "#CC97F3"
+    }
+  },
+  {
+    "name": "중국어",
+    "code": "cn",
+    "id": "defaultzh",
+    "bcolors": {
+      "backgroundColor": "#FDE27F"
+    }
+  },
+  {
+    "name": "일본어",
+    "code": "jp",
+    "id": "defaultja",
+    "bcolors": {
+      "backgroundColor": "#7EA3ED"
+    }
+  },
+]
